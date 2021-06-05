@@ -1,5 +1,9 @@
 import 'package:vinto/model/user.dart';
 
+// ignore_for_file: camel_case_types
+// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: deprecated_member_use
+
 class Product {
   String name;
   String description;
@@ -19,20 +23,20 @@ class Product {
 
   Product(
       {this.name,
-        this.description,
-        this.price,
-        this.rating,
-        this.image,
-        this.interest,
-        this.experience,
-        this.mood,
-        this.taste,
-        this.archived,
-        this.archivedAt,
-        this.updatedAt,
-        this.sId,
-        this.createdAt,
-        this.createdBy});
+      this.description,
+      this.price,
+      this.rating,
+      this.image,
+      this.interest,
+      this.experience,
+      this.mood,
+      this.taste,
+      this.archived,
+      this.archivedAt,
+      this.updatedAt,
+      this.sId,
+      this.createdAt,
+      this.createdBy});
 
   Product.fromJson(Map<String, dynamic> json) {
     print("json value: ${json['price']}");
@@ -119,14 +123,14 @@ class PInterest {
 
   PInterest(
       {this.name,
-        this.description,
-        this.archived,
-        this.archivedAt,
-        this.createdAt,
-        this.updatedAt,
-        this.sId,
-        this.picture,
-        this.createdBy});
+      this.description,
+      this.archived,
+      this.archivedAt,
+      this.createdAt,
+      this.updatedAt,
+      this.sId,
+      this.picture,
+      this.createdBy});
 
   PInterest.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -167,13 +171,13 @@ class PExperience {
 
   PExperience(
       {this.name,
-        this.description,
-        this.archived,
-        this.archivedAt,
-        this.createdAt,
-        this.updatedAt,
-        this.sId,
-        this.createdBy});
+      this.description,
+      this.archived,
+      this.archivedAt,
+      this.createdAt,
+      this.updatedAt,
+      this.sId,
+      this.createdBy});
 
   PExperience.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -199,6 +203,7 @@ class PExperience {
     return data;
   }
 }
+
 class PMood {
   String name;
   String description;
@@ -211,13 +216,13 @@ class PMood {
 
   PMood(
       {this.name,
-        this.description,
-        this.archived,
-        this.archivedAt,
-        this.createdAt,
-        this.updatedAt,
-        this.sId,
-        this.createdBy});
+      this.description,
+      this.archived,
+      this.archivedAt,
+      this.createdAt,
+      this.updatedAt,
+      this.sId,
+      this.createdBy});
 
   PMood.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -258,13 +263,13 @@ class PTaste {
 
   PTaste(
       {this.name,
-        this.description,
-        this.archived,
-        this.archivedAt,
-        this.createdAt,
-        this.updatedAt,
-        this.sId,
-        this.createdBy});
+      this.description,
+      this.archived,
+      this.archivedAt,
+      this.createdAt,
+      this.updatedAt,
+      this.sId,
+      this.createdBy});
 
   PTaste.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -274,7 +279,7 @@ class PTaste {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     sId = json['_id'];
-    createdBy = json['created_by'] ;
+    createdBy = json['created_by'];
   }
 
   Map<String, dynamic> toJson() {
@@ -293,9 +298,6 @@ class PTaste {
   }
 }
 
-
-
-
 class CreatedBy {
   bool archived;
   Null archivedAt;
@@ -307,12 +309,12 @@ class CreatedBy {
 
   CreatedBy(
       {this.archived,
-        this.archivedAt,
-        this.sId,
-        this.username,
-        this.role,
-        this.client,
-        this.lastLogin});
+      this.archivedAt,
+      this.sId,
+      this.username,
+      this.role,
+      this.client,
+      this.lastLogin});
 
   CreatedBy.fromJson(Map<String, dynamic> json) {
     archived = json['archived'];
@@ -321,7 +323,7 @@ class CreatedBy {
     username = json['username'];
     role = json['role'];
     client =
-    json['client'] != null ? new Client.fromJson(json['client']) : null;
+        json['client'] != null ? new Client.fromJson(json['client']) : null;
     lastLogin = json['last_login'];
   }
 

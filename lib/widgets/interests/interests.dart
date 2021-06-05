@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vinto/helper/constant.dart';
 
+// ignore_for_file: camel_case_types
+// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: deprecated_member_use
+
 class InterestsWidget extends StatefulWidget {
-  var dName;
+  final dName;
 
   InterestsWidget({
     this.dName,
@@ -32,7 +36,7 @@ class _InterestsWidgetState extends State<InterestsWidget> {
       child: Align(
         child: Container(
           width: 85,
-          margin: EdgeInsets.symmetric(horizontal: Get.width*0.015),
+          margin: EdgeInsets.symmetric(horizontal: Get.width * 0.015),
           padding: EdgeInsets.only(left: 15, right: 15, top: 16, bottom: 12),
           decoration: BoxDecoration(
             color: bgClr,

@@ -1,6 +1,3 @@
-
-import 'package:geolocator/geolocator.dart';
-
 class UserModel {
   String token;
   User user;
@@ -33,12 +30,12 @@ class User {
 
   User(
       {this.archived,
-        this.archivedAt,
-        this.sId,
-        this.email,
-        this.role,
-        this.client,
-        this.lastLogin});
+      this.archivedAt,
+      this.sId,
+      this.email,
+      this.role,
+      this.client,
+      this.lastLogin});
 
   User.fromJson(Map<String, dynamic> json) {
     archived = json['archived'];
@@ -47,7 +44,7 @@ class User {
     email = json['email'];
     role = json['role'];
     client =
-    json['client'] != null ? new Client.fromJson(json['client']) : null;
+        json['client'] != null ? new Client.fromJson(json['client']) : null;
     lastLogin = json['last_login'];
   }
 
@@ -90,24 +87,24 @@ class Client {
 
   Client(
       {this.location,
-        this.picture,
-        this.longtiude,
-        this.latitude,
-        this.firstName,
-        this.lastName,
-        this.email,
-        this.phone,
-        this.dateOfBirth,
-        this.ssn,
-        this.idNumber,
-        this.carMake,
-        this.isAvailable,
-        this.country,
-        this.userType,
-        this.updatedAt,
-        this.sId,
-        this.createdAt,
-        this.user,
+      this.picture,
+      this.longtiude,
+      this.latitude,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.phone,
+      this.dateOfBirth,
+      this.ssn,
+      this.idNumber,
+      this.carMake,
+      this.isAvailable,
+      this.country,
+      this.userType,
+      this.updatedAt,
+      this.sId,
+      this.createdAt,
+      this.user,
       this.username});
 
   Client.fromJson(Map<String, dynamic> json) {

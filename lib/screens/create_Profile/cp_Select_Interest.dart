@@ -2,11 +2,8 @@ import 'package:get/get.dart';
 import 'package:vinto/controller/interest_controller.dart';
 import 'package:vinto/helper/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:vinto/model/create_profile_model.dart';
 import 'package:vinto/model/interests.dart';
-import 'package:vinto/screens/create_Profile/cp_Select_Interest_2.dart';
 import 'package:vinto/services/api_url.dart';
-import 'package:vinto/widgets/diseases/diseases.dart';
 import 'package:vinto/widgets/light_Text.dart';
 import 'package:vinto/widgets/location_Pin.dart';
 import 'package:vinto/widgets/yellow_NextButton.dart';
@@ -146,20 +143,28 @@ class _CPSelectInterestState extends State<CPSelectInterest> {
                   SizedBox(
                     height: 15,
                   ),
-                 interstSelected != null ? Container(
-                    height: 50,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: interstSelected.toSet().toList().length,
-                        itemBuilder: (context,index){
-                        var item = interstSelected.toSet().toList();
-                      return Container(
-                        padding: const EdgeInsets.all(2),
-                          child: Text("${item[index].name},",
-                            style: TextStyle(fontSize: 13,color: Colors.white),));
-                    }),
-                  ) : Container(),
-                  SizedBox(height: 10,),
+                  interstSelected != null
+                      ? Container(
+                          height: 50,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount:
+                                  interstSelected.toSet().toList().length,
+                              itemBuilder: (context, index) {
+                                var item = interstSelected.toSet().toList();
+                                return Container(
+                                    padding: const EdgeInsets.all(2),
+                                    child: Text(
+                                      "${item[index].name},",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.white),
+                                    ));
+                              }),
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 10,
+                  ),
                   GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 4,
@@ -175,21 +180,20 @@ class _CPSelectInterestState extends State<CPSelectInterest> {
                           onTap: () {
                             // print("hello naow");
                             setState(() {
-                              interstSelected.add(
-                                  interestController.interestsList[index]);
+                              interstSelected
+                                  .add(interestController.interestsList[index]);
                             });
                           },
-                          onDoubleTap: (){
-                            if(interstSelected.contains(I)){
+                          onDoubleTap: () {
+                            if (interstSelected.contains(I)) {
                               setState(() {
                                 interstSelected.remove(I);
                               });
                             }
                           },
                           child: Container(
-
                             decoration: BoxDecoration(
-                              color:  KWhiteColor.withOpacity(0.1),
+                              color: KWhiteColor.withOpacity(0.1),
                               // color: KWhiteColor.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -216,8 +220,12 @@ class _CPSelectInterestState extends State<CPSelectInterest> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        yellowButton("NEXT", 100.0, CPSelectInterest_1(
-                          my_selected_interests: interstSelected,)),
+                        yellowButton(
+                            "NEXT",
+                            100.0,
+                            CPSelectInterest_1(
+                              my_selected_interests: interstSelected,
+                            )),
                       ],
                     ),
                   ),

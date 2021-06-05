@@ -3,8 +3,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:vinto/controller/auth_controller.dart';
 import 'package:vinto/helper/constant.dart';
-import 'package:vinto/screens/create_Profile/cp_Select_Interest_1.dart';
-import 'package:vinto/screens/create_Profile/profile_intro.dart';
 import 'package:vinto/screens/register/sign_In.dart';
 import 'package:vinto/widgets/light_Text.dart';
 import 'package:vinto/widgets/text_Field.dart';
@@ -16,7 +14,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   AuthController authController = AuthController.to;
-  GlobalKey<FormState>_regForm = new GlobalKey<FormState>();
+  GlobalKey<FormState> _regForm = new GlobalKey<FormState>();
   TextEditingController locationController = new TextEditingController();
   TextEditingController fullNameController = new TextEditingController();
   TextEditingController emailController = new TextEditingController();
@@ -24,16 +22,15 @@ class _SignUpState extends State<SignUp> {
   TextEditingController passwordController = new TextEditingController();
   Position mylocation;
 
-  getPosition()async {
+  getPosition() async {
     mylocation = await _determinePosition();
     print("data of location : $mylocation");
   }
 
   @override
   void initState() {
-     getPosition();
+    getPosition();
     super.initState();
-
   }
 
   @override
@@ -46,7 +43,7 @@ class _SignUpState extends State<SignUp> {
             padding: EdgeInsets.symmetric(horizontal: 25),
             children: [
               Container(
-                margin: EdgeInsets.only(top: 60,bottom: 20,left: 18),
+                margin: EdgeInsets.only(top: 60, bottom: 20, left: 18),
                 child: Text(
                   "Sign up for Vinto",
                   style: TextStyle(
@@ -62,10 +59,16 @@ class _SignUpState extends State<SignUp> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset("assets/personal.png",height: 20,width: 20,),
-                        SizedBox(width: 20,),
+                        Image.asset(
+                          "assets/personal.png",
+                          height: 20,
+                          width: 20,
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
                         Container(
-                          width: Get.width*0.7,
+                          width: Get.width * 0.7,
                           child: MyTextField(
                             controller: fullNameController,
                             hintText: "User Name",
@@ -80,13 +83,19 @@ class _SignUpState extends State<SignUp> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset("assets/location.png",height: 20,width: 20,),
-                          SizedBox(width: 20,),
+                          Image.asset(
+                            "assets/location.png",
+                            height: 20,
+                            width: 20,
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
                           Container(
-                            width: Get.width*0.7,
+                            width: Get.width * 0.7,
                             child: MyTextField(
                               controller: locationController,
-                              hintText: "Location"  ,
+                              hintText: "Location",
                               obSecure: false,
                             ),
                           ),
@@ -97,10 +106,16 @@ class _SignUpState extends State<SignUp> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset("assets/country.png",height: 20,width: 20,),
-                        SizedBox(width: 20,),
+                        Image.asset(
+                          "assets/country.png",
+                          height: 20,
+                          width: 20,
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
                         Container(
-                          width: Get.width*0.7,
+                          width: Get.width * 0.7,
                           child: MyTextField(
                             controller: countryController,
                             hintText: "Country",
@@ -115,10 +130,16 @@ class _SignUpState extends State<SignUp> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset("assets/gmail.png",height: 20,width: 20,),
-                          SizedBox(width: 20,),
+                          Image.asset(
+                            "assets/gmail.png",
+                            height: 20,
+                            width: 20,
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
                           Container(
-                            width: Get.width*0.7,
+                            width: Get.width * 0.7,
                             child: MyTextField(
                               controller: emailController,
                               hintText: "Email",
@@ -132,10 +153,16 @@ class _SignUpState extends State<SignUp> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset("assets/lock.png",height: 20,width: 20,),
-                        SizedBox(width: 20,),
+                        Image.asset(
+                          "assets/lock.png",
+                          height: 20,
+                          width: 20,
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
                         Container(
-                          width: Get.width*0.7,
+                          width: Get.width * 0.7,
                           child: MyPasswordField(
                             controller: passwordController,
                             hintText: "Password",
@@ -144,38 +171,51 @@ class _SignUpState extends State<SignUp> {
                       ],
                     ),
 
-
-                    SizedBox(height: 50,),
+                    SizedBox(
+                      height: 50,
+                    ),
                     // ignore: deprecated_member_use
                     Column(
                       children: [
                         Container(
-                          width: Get.width*0.8,
-                          child: FlatButton(
-                            padding: EdgeInsets.symmetric(vertical: 13),
-                            color: KWhiteColor,
-                            onPressed: (){
-                              var username = fullNameController.value.text.trim();
-                              var location = locationController.value.text.trim();
-                              var country = countryController.value.text.trim();
+                          width: Get.width * 0.8,
+                          child: TextButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                  KWhiteColor,
+                                ),
+                                padding: MaterialStateProperty.all(
+                                  EdgeInsets.symmetric(vertical: 13),
+                                )),
+                            onPressed: () {
+                              var username =
+                                  fullNameController.value.text.trim();
+                              var location =
+                                  locationController.value.text.trim();
+                              // var country = countryController.value.text.trim();
                               var email = emailController.value.text.trim();
-                              var password = passwordController.value.text.trim();
-                              if(_regForm.currentState.validate()){
+                              var password =
+                                  passwordController.value.text.trim();
+                              if (_regForm.currentState.validate()) {
                                 var data = {
-                                  "username":username,
-                                  "password":password,
-                                  "place":location,
-                                  "email":email,
-                                  "user_type":"client",
-                                  "location":  {
-                                    "types":"Point",
-                                    "coordinates":[mylocation?.latitude, mylocation?.longitude]
-                                  } };
+                                  "username": username,
+                                  "password": password,
+                                  "place": location,
+                                  "email": email,
+                                  "user_type": "client",
+                                  "location": {
+                                    "types": "Point",
+                                    "coordinates": [
+                                      mylocation?.latitude,
+                                      mylocation?.longitude
+                                    ]
+                                  }
+                                };
                                 authController.register(context, data);
                               }
 
                               // Get.to(Profile_Intro())
-                            } ,
+                            },
                             child: Text("Sign Up", style: buttonText),
                           ),
                         ),
@@ -220,11 +260,11 @@ class _SignUpState extends State<SignUp> {
               Column(
                 children: [
                   Container(
-                    width: Get.width*0.8,
+                    width: Get.width * 0.8,
                     child: LightText(
                       size: 13.0,
                       text:
-                      "By using Vinto, you agree to the Terms, Cookie Policy and Privacy Policy",
+                          "By using Vinto, you agree to the Terms, Cookie Policy and Privacy Policy",
                       align: "center",
                     ),
                   ),
@@ -244,7 +284,6 @@ class _SignUpState extends State<SignUp> {
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-
       return Future.error('Location services are disabled.');
     }
 
@@ -252,7 +291,6 @@ class _SignUpState extends State<SignUp> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-
         return Future.error('Location permissions are denied');
       }
     }
@@ -264,5 +302,4 @@ class _SignUpState extends State<SignUp> {
 
     return await Geolocator.getCurrentPosition();
   }
-
 }

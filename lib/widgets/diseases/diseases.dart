@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:vinto/helper/constant.dart';
 import 'package:vinto/model/experience.dart';
 
 class Diseases extends StatefulWidget {
-  Experience dName;
-
+  final Experience dName;
 
   Diseases({
     this.dName,
@@ -22,7 +20,6 @@ class _DiseasesState extends State<Diseases> {
 
   void selectedItems() {
     setState(() {
-
       expriance.add(widget.dName);
       bgClr == Colors.transparent
           ? bgClr = KWhiteColor.withOpacity(0.4)
