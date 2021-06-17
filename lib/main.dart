@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vinto/controller/auth_controller.dart';
 import 'package:vinto/controller/checkout_controller.dart';
-import 'package:vinto/controller/interest_controller.dart';
 import 'package:vinto/screens/create_Profile/cp_Select_Interest.dart';
 import 'package:vinto/screens/create_Profile/cp_Select_Interest_1.dart';
 import 'package:vinto/screens/create_Profile/cp_Select_Interest_2.dart';
@@ -19,7 +18,6 @@ import 'helper/constant.dart';
 void main() {
   Get.put<AuthController>(AuthController());
   Get.put<ExperienceController>(ExperienceController());
-  Get.put<InterestController>(InterestController());
   Get.put<CheckoutController>(CheckoutController());
   runApp(MyApp());
 }

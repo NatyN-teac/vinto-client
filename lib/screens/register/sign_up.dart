@@ -13,7 +13,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  AuthController authController = AuthController.to;
+  AuthController authController = AuthController();
   GlobalKey<FormState> _regForm = new GlobalKey<FormState>();
   TextEditingController locationController = new TextEditingController();
   TextEditingController fullNameController = new TextEditingController();

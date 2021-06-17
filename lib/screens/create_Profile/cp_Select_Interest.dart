@@ -21,15 +21,14 @@ class _CPSelectInterestState extends State<CPSelectInterest> {
 
   @override
   Widget build(BuildContext context) {
-    print("int: ${interestController.interestsList}");
     return SafeArea(
       child: Scaffold(
         body: Obx(() {
-          if (interestController.isLoading.value)
+          if (!interestController.isLoading.value) {
             return Center(
               child: CircularProgressIndicator(),
             );
-          else
+          } else {
             return Container(
               decoration: mainBg,
               child: ListView(
@@ -143,7 +142,7 @@ class _CPSelectInterestState extends State<CPSelectInterest> {
                   SizedBox(
                     height: 15,
                   ),
-                  interstSelected != null
+                  interstSelected.isNotEmpty
                       ? Container(
                           height: 50,
                           child: ListView.builder(
@@ -232,6 +231,7 @@ class _CPSelectInterestState extends State<CPSelectInterest> {
                 ],
               ),
             );
+          }
         }),
       ),
     );

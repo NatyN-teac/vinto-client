@@ -33,7 +33,9 @@ class InterestController extends GetxController {
       if (response.statusCode == 200) {
         var result =
             (response.data as List).map((e) => Interests.fromJson(e)).toList();
+
         interestsList.addAll(result);
+        isLoading(false);
       }
       isLoading(false);
     } on DioError {
