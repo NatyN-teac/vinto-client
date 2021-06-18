@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:get/get.dart';
 import 'package:vinto/controller/experience_controller.dart';
 import 'package:vinto/helper/constant.dart';
@@ -7,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:vinto/model/experience.dart';
 import 'package:vinto/model/interests.dart';
 import 'package:vinto/screens/create_Profile/cp_Select_Interest_2.dart';
-import 'package:vinto/widgets/diseases/diseases.dart';
 import 'package:vinto/widgets/light_Text.dart';
 import 'package:vinto/widgets/location_Pin.dart';
 import 'package:vinto/widgets/yellow_NextButton.dart';
+
+// ignore_for_file: camel_case_types
+// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: deprecated_member_use
 
 class CPSelectInterest_1 extends StatefulWidget {
   final List<Interests> my_selected_interests;

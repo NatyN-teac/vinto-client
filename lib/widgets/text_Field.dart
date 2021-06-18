@@ -2,24 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:vinto/helper/constant.dart';
 
 class MyTextField extends StatelessWidget {
-  var hintText;
-  bool obSecure = false;
-  TextEditingController controller;
+  final hintText;
+  final bool obSecure;
+  final TextEditingController controller;
 
-  MyTextField({
-    this.hintText,
-    this.obSecure,
-    this.controller
-  });
+  MyTextField({this.hintText, this.obSecure = false, this.controller});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-     validator: (v) {
-       if(v.isEmpty) {
-         return "Field must have value";
-       }else return null;
-     },
+      validator: (v) {
+        if (v.isEmpty) {
+          return "Field must have value";
+        } else
+          return null;
+      },
       controller: controller,
       obscureText: obSecure,
       cursorColor: KWhiteColor,
@@ -56,41 +53,37 @@ class MyTextField extends StatelessWidget {
   }
 }
 
-
-
 class MyPasswordField extends StatefulWidget {
-  var hintText;
-  bool obSecure = true;
-  bool obSecureIcon = true;
-  TextEditingController controller;
+  final hintText;
+  final TextEditingController controller;
 
-  MyPasswordField({
-    this.hintText,
-    this.controller
-  });
+  MyPasswordField({this.hintText, this.controller});
 
   @override
   _MyPasswordFieldState createState() => _MyPasswordFieldState();
 }
 
 class _MyPasswordFieldState extends State<MyPasswordField> {
+  bool obSecure = true;
+  bool obSecureIcon = true;
   void showText() {
     setState(() {
-      widget.obSecure = !widget.obSecure;
-      widget.obSecureIcon = !widget.obSecureIcon;
+      obSecure = !obSecure;
+      obSecureIcon = !obSecureIcon;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      validator: (v){
-        if(v.length < 6){
+      validator: (v) {
+        if (v.length < 6) {
           return "Password should be atleast 6 character";
-        }else return null;
+        } else
+          return null;
       },
       controller: widget.controller,
-      obscureText: widget.obSecure,
+      obscureText: obSecure,
       cursorColor: KWhiteColor,
       style: TextStyle(
         fontSize: 17,
@@ -102,7 +95,7 @@ class _MyPasswordFieldState extends State<MyPasswordField> {
         suffixIcon: GestureDetector(
           onTap: showText,
           child: Visibility(
-            visible: widget.obSecureIcon,
+            visible: obSecureIcon,
             child: Icon(
               Icons.visibility,
               color: KWhiteColor,

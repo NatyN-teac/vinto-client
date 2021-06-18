@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vinto/controller/auth_controller.dart';
 import 'package:vinto/helper/constant.dart';
-import 'package:vinto/screens/create_Profile/cp_Select_Interest_1.dart';
 import 'package:vinto/screens/register/sign_up.dart';
 import 'package:vinto/widgets/light_Text.dart';
 import 'package:vinto/widgets/text_Field.dart';
@@ -24,8 +23,8 @@ class _SignInState extends State<SignIn> {
       body: Container(
         decoration: mainBg,
         child: ListView(
-          padding: EdgeInsets.symmetric(
-              horizontal: Get.width * 0.1, vertical: 20),
+          padding:
+              EdgeInsets.symmetric(horizontal: Get.width * 0.1, vertical: 20),
           children: [
             Center(
               child: Container(
@@ -48,44 +47,43 @@ class _SignInState extends State<SignIn> {
             SizedBox(
               height: 50,
             ),
-           Form(
-             key: _loginKey,
-             child: Column(
-               children: [
-                 MyTextField(
-                   controller: usernameController,
-                   hintText: "yourname@email.com",
-                   obSecure: false,
-                 ),
-                 SizedBox(
-                   height: 20,
-                 ),
-                 MyPasswordField(
-                   controller: passwordController,
-                   hintText: "Password",
-                 ),
-                 SizedBox(
-                   height: 50,
-                 ),
-                 FlatButton(
-                   padding: EdgeInsets.symmetric(vertical: 13),
-                   color: KWhiteColor,
-                   onPressed: () {
-                    if(_loginKey.currentState.validate()){
-                      var username = usernameController.value.text.trim();
-                      var password = passwordController.value.text.trim();
-                      authController.login(context, username , password);
-
-
-
-                    }
-
-                   },
-                   child: Text("Sign In", style: buttonText),
-                 ),
-               ],
-             ),
-           ),
+            Form(
+              key: _loginKey,
+              child: Column(
+                children: [
+                  MyTextField(
+                    controller: usernameController,
+                    hintText: "yourname@email.com",
+                    obSecure: false,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  MyPasswordField(
+                    controller: passwordController,
+                    hintText: "Password",
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  TextButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(KWhiteColor),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(vertical: 13),
+                        )),
+                    onPressed: () {
+                      if (_loginKey.currentState.validate()) {
+                        var username = usernameController.value.text.trim();
+                        var password = passwordController.value.text.trim();
+                        authController.login(context, username, password);
+                      }
+                    },
+                    child: Text("Sign In", style: buttonText),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(
               height: 50,
             ),
@@ -114,7 +112,9 @@ class _SignInState extends State<SignIn> {
                 ),
               ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             GestureDetector(
               onTap: () {
                 Get.to(SignUp());
@@ -148,7 +148,7 @@ class _SignInState extends State<SignIn> {
             LightText(
               size: 13.0,
               text:
-              "By using Vinto, you agree to the Terms, Cookie Policy and Privacy Policy",
+                  "By using Vinto, you agree to the Terms, Cookie Policy and Privacy Policy",
               align: "center",
             ),
           ],

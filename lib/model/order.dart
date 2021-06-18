@@ -1,6 +1,8 @@
-
-
 import 'package:vinto/model/product.dart';
+
+// ignore_for_file: camel_case_types
+// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: deprecated_member_use
 
 class Order {
   String productOwner;
@@ -16,15 +18,15 @@ class Order {
 
   Order(
       {this.productOwner,
-        this.assignedFor,
-        this.isAccepted,
-        this.archivedAt,
-        this.updatedAt,
-        this.sId,
-        this.orderBy,
-        this.product,
-        this.createdAt,
-        this.createdBy});
+      this.assignedFor,
+      this.isAccepted,
+      this.archivedAt,
+      this.updatedAt,
+      this.sId,
+      this.orderBy,
+      this.product,
+      this.createdAt,
+      this.createdBy});
 
   Order.fromJson(Map<String, dynamic> json) {
     productOwner = json['product_owner'];
@@ -39,11 +41,11 @@ class Order {
         ? new AssignedFor.fromJson(json['order_by'])
         : null;
     product =
-    json['product'] != null ? new Product.fromJson(json['product']) : null;
+        json['product'] != null ? new Product.fromJson(json['product']) : null;
     createdAt = json['created_at'];
     createdBy = createdBy = json['created_by'] != null
         ? new CreatedBy.fromJson(json['created_by'])
-        : null;;
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -65,7 +67,8 @@ class Order {
     data['created_at'] = this.createdAt;
     if (this.createdBy != null) {
       data['created_by'] = this.createdBy.toJson();
-    };
+    }
+
     return data;
   }
 }
@@ -95,26 +98,26 @@ class AssignedFor {
 
   AssignedFor(
       {this.location,
-        this.picture,
-        this.longtiude,
-        this.latitude,
-        this.place,
-        this.email,
-        this.phone,
-        this.dateOfBirth,
-        this.ssn,
-        this.idNumber,
-        this.carMake,
-        this.isAvailable,
-        this.country,
-        this.userType,
-        this.updatedAt,
-        this.sId,
-        this.firstName,
-        this.lastName,
-        this.createdAt,
-        this.username,
-        this.user});
+      this.picture,
+      this.longtiude,
+      this.latitude,
+      this.place,
+      this.email,
+      this.phone,
+      this.dateOfBirth,
+      this.ssn,
+      this.idNumber,
+      this.carMake,
+      this.isAvailable,
+      this.country,
+      this.userType,
+      this.updatedAt,
+      this.sId,
+      this.firstName,
+      this.lastName,
+      this.createdAt,
+      this.username,
+      this.user});
 
   AssignedFor.fromJson(Map<String, dynamic> json) {
     location = json['location'] != null
@@ -209,20 +212,20 @@ class Product {
 
   Product(
       {this.name,
-        this.description,
-        this.price,
-        this.rating,
-        this.image,
-        this.interest,
-        this.experience,
-        this.mood,
-        this.taste,
-        this.archived,
-        this.archivedAt,
-        this.updatedAt,
-        this.sId,
-        this.createdAt,
-        this.createdBy});
+      this.description,
+      this.price,
+      this.rating,
+      this.image,
+      this.interest,
+      this.experience,
+      this.mood,
+      this.taste,
+      this.archived,
+      this.archivedAt,
+      this.updatedAt,
+      this.sId,
+      this.createdAt,
+      this.createdBy});
 
   Product.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -295,8 +298,6 @@ class Product {
   }
 }
 
-
-
 class CreatedBy {
   bool archived;
   Null archivedAt;
@@ -309,13 +310,13 @@ class CreatedBy {
 
   CreatedBy(
       {this.archived,
-        this.archivedAt,
-        this.sId,
-        this.password,
-        this.username,
-        this.role,
-        this.client,
-        this.lastLogin});
+      this.archivedAt,
+      this.sId,
+      this.password,
+      this.username,
+      this.role,
+      this.client,
+      this.lastLogin});
 
   CreatedBy.fromJson(Map<String, dynamic> json) {
     archived = json['archived'];

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vinto/controller/taste_controller.dart';
@@ -9,12 +7,12 @@ import 'package:vinto/model/experience.dart';
 import 'package:vinto/model/interests.dart';
 import 'package:vinto/model/mood.dart';
 import 'package:vinto/model/taste.dart';
-import 'package:vinto/screens/create_Profile/cp_Select_Interest_2.dart';
 import 'package:vinto/screens/loading/loading_Screen.dart';
-import 'package:vinto/widgets/interests/interests.dart';
 import 'package:vinto/widgets/light_Text.dart';
 import 'package:vinto/widgets/location_Pin.dart';
-import 'package:vinto/widgets/yellow_NextButton.dart';
+
+// ignore_for_file: camel_case_types
+// ignore_for_file: non_constant_identifier_names
 
 class CP_Taste extends StatefulWidget {
   final List<Interests> myInterest;
@@ -122,144 +120,48 @@ class _CP_TasteState extends State<CP_Taste> {
                           );
                         }),
                   ),
-                  // SizedBox(height: 10,),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
-                  //   children: [
-                  //     Interests(
-                  //       dName: "Mint",
-                  //     ),
-                  //     Interests(
-                  //       dName: "Pine",
-                  //     ),
-                  //     Interests(
-                  //       dName: "Orange",
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox(height: 10,),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.end,
-                  //   children: [
-                  //     Interests(
-                  //       dName: "Berry",
-                  //     ),
-                  //     Interests(
-                  //       dName: "Rose",
-                  //     ),
-                  //     Interests(
-                  //       dName: "Tobacco",
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox(height: 10,),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
-                  //   children: [
-                  //     Interests(
-                  //       dName: "Lime",
-                  //     ),
-                  //     Interests(
-                  //       dName: "Coffee",
-                  //     ),
-                  //     Interests(
-                  //       dName: "Honey",
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox(height: 10,),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.end,
-                  //   children: [
-                  //     Interests(
-                  //       dName: "Grape",
-                  //     ),
-                  //     Interests(
-                  //       dName: "Lavender",
-                  //     ),
-                  //     Interests(
-                  //       dName: "Lemon",
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox(height: 10,),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
-                  //   children: [
-                  //     Interests(
-                  //       dName: "Pine",
-                  //     ),
-                  //     Interests(
-                  //       dName: "Earthy",
-                  //     ),
-                  //     Interests(
-                  //       dName: "Apple",
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox(height: 10,),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     Interests(
-                  //       dName: "Apricot",
-                  //     ),
-                  //     Interests(
-                  //       dName: "Mango",
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox(height: 10,),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     Interests(
-                  //       dName: "Vanilla",
-                  //     ),
-                  //   ],
-                  // ),
-
                   SizedBox(
                     height: 60,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      FlatButton(
-                        onPressed: () async{
-                          SharedPreferences pref = await SharedPreferences.getInstance();
+                      TextButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(KYellowColor),
+                          padding: MaterialStateProperty.all(
+                              EdgeInsets.symmetric(vertical: 12)),
+                        ),
+                        onPressed: () async {
+                          SharedPreferences pref =
+                              await SharedPreferences.getInstance();
 
-                         try{
-                           List<String> interstIds = widget.myInterest.map((e) => e.sId).toList();
-                           List<String> moodIds = widget.myMood.map((e) => e.sId).toList();
-                           List<String> experienceId = widget.myExperience.map((e) => e.sId).toList();
-                           List<String> tastId = selectedTastes.map((e) => e.sId).toList();
+                          try {
+                            List<String> interstIds =
+                                widget.myInterest.map((e) => e.sId).toList();
+                            List<String> moodIds =
+                                widget.myMood.map((e) => e.sId).toList();
+                            List<String> experienceId =
+                                widget.myExperience.map((e) => e.sId).toList();
+                            List<String> tastId =
+                                selectedTastes.map((e) => e.sId).toList();
 
-                           var StringInterst = interstIds.join(',');
-                           var StringMood = moodIds.join(',');
-                           var StringExperience = experienceId.join(',');
-                           var StringTaste = tastId.join(',');
+                            var StringInterst = interstIds.join(',');
+                            var StringMood = moodIds.join(',');
+                            var StringExperience = experienceId.join(',');
+                            var StringTaste = tastId.join(',');
 
+                            pref.setString("interest", StringInterst);
+                            pref.setString("mood", StringMood);
+                            pref.setString("exp", StringExperience);
+                            pref.setString("taste", StringTaste);
 
-                           pref.setString("interest",StringInterst);
-                           pref.setString("mood",StringMood);
-                           pref.setString("exp",StringExperience);
-                           pref.setString("taste",StringTaste);
-
-                           Get.to(Loading());
-                         }catch(e){
-                           print("error: $e");
-                         }
-
-
-
-
-
-
+                            Get.to(Loading());
+                          } catch (e) {
+                            print("error: $e");
+                          }
                         },
-                        minWidth: 100,
-                        color: KYellowColor,
-                        padding: EdgeInsets.symmetric(vertical: 12),
                         child: Padding(
                           padding: EdgeInsets.only(top: 4),
                           child: Text(
@@ -272,7 +174,6 @@ class _CP_TasteState extends State<CP_Taste> {
                           ),
                         ),
                       ),
-
                     ],
                   ),
                 ],

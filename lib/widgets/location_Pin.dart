@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vinto/helper/constant.dart';
 import 'package:vinto/widgets/light_Text.dart';
 
 Widget locationPin() {
