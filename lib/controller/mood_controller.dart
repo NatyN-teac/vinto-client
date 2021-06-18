@@ -1,6 +1,3 @@
-
-
-
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +6,6 @@ import 'package:vinto/services/api_url.dart';
 
 class MoodController extends GetxController {
   Dio dio = new Dio();
-
   var moodList = List<Mood>().obs;
   var isLoading = true.obs;
 
@@ -32,7 +28,6 @@ class MoodController extends GetxController {
         var result = (response.data as List).map((e) => Mood.fromJson(e)).toList();
         moodList.assignAll(result);
         print("res: $result");
-        // isLoading(false);
 
       }
       isLoading(false);
