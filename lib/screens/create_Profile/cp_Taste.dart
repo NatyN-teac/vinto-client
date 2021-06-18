@@ -14,6 +14,8 @@ import 'package:vinto/widgets/location_Pin.dart';
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
 
+final tasteController = Get.find<TasteController>();
+
 class CP_Taste extends StatefulWidget {
   final List<Interests> myInterest;
   final List<Experience> myExperience;
@@ -27,7 +29,6 @@ class CP_Taste extends StatefulWidget {
 }
 
 class _CP_TasteState extends State<CP_Taste> {
-  final TasteController tasteController = Get.put(TasteController());
   List<Taste> selectedTastes = [];
 
   @override

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vinto/blocs/appstate.dart';
+import 'package:vinto/blocs/auth-bloc.dart';
 import 'package:vinto/screens/home_screen/home.dart';
 import 'package:vinto/screens/register/sign_In.dart';
+import 'package:vinto/utils/di/get_it_config.dart';
 
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
+
+final _appstate = getIt.get<AppState>();
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -13,31 +17,30 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  SharedPreferences prefs;
   @override
   void initState() {
+    _appstate.initAuth();
     super.initState();
-
-    Future.delayed(Duration(seconds: 3), () async {
-      prefs = await SharedPreferences.getInstance();
-      var token_stored = prefs.getString("token");
-
-      var tastes = prefs.getString("taste");
-
-      if (token_stored != null && token_stored.isNotEmpty) {
-        if (tastes == null) {
-          Get.offAll(SignIn());
-        }
-
-        if (tastes != null || tastes.isNotEmpty) {
-          Get.offAll(Homescreen());
-        }
-      } else {
-        Get.offAll(SignIn());
-      }
-    });
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder<AuthState>(
+          initialData: new AuthState(fresh: null, token: null),
+          stream: _appstate.authStateStream,
+          builder: (context, snapshot) {
+            if (_appstate.state.state == AuthStateEnum.loading) {
+              return _Splash();
+            } else {
+              return _appstate.state.auth ? Homescreen() : SignIn();
+            }
+          }),
+    );
+  }
+}
+
+class _Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

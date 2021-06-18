@@ -10,13 +10,14 @@ import 'package:vinto/widgets/yellow_NextButton.dart';
 
 import 'cp_Select_Interest_1.dart';
 
+final interestController = Get.find<InterestController>();
+
 class CPSelectInterest extends StatefulWidget {
   @override
   _CPSelectInterestState createState() => _CPSelectInterestState();
 }
 
 class _CPSelectInterestState extends State<CPSelectInterest> {
-  final InterestController interestController = Get.put(InterestController());
   List<Interests> interstSelected = [];
 
   @override

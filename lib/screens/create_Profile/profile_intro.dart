@@ -1,7 +1,8 @@
+import 'package:vinto/blocs/appstate.dart';
 import 'package:vinto/helper/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:vinto/model/user.dart';
 import 'package:vinto/screens/create_Profile/create_profile.dart';
+import 'package:vinto/utils/di/get_it_config.dart';
 import 'package:vinto/widgets/light_Text.dart';
 import 'package:vinto/widgets/location_Pin.dart';
 import 'package:vinto/widgets/yellow_NextButton.dart';
@@ -10,10 +11,12 @@ import 'package:vinto/widgets/yellow_NextButton.dart';
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: deprecated_member_use
 
-class Profile_Intro extends StatefulWidget {
-  final User user;
+final _appstate = getIt.get<AppState>();
 
-  const Profile_Intro({Key key, this.user}) : super(key: key);
+class Profile_Intro extends StatefulWidget {
+  const Profile_Intro({
+    Key key,
+  }) : super(key: key);
   @override
   _Profile_IntroState createState() => _Profile_IntroState();
 }
@@ -37,7 +40,7 @@ class _Profile_IntroState extends State<Profile_Intro> {
               ),
               LightText(
                 text:
-                    "Hi, ${widget.user.client.username}! 👋\nBefore we get started,",
+                    "Hi, ${_appstate.state.profile.client.username} ! 👋\nBefore we get started,",
                 size: 24.0,
                 align: "left",
               ),
