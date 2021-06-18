@@ -13,6 +13,8 @@ import 'package:vinto/widgets/yellow_NextButton.dart';
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: deprecated_member_use
 
+final expController = Get.find<ExperienceController>();
+
 class CPSelectInterest_1 extends StatefulWidget {
   final List<Interests> my_selected_interests;
 
@@ -27,8 +29,6 @@ class _CPSelectInterest_1State extends State<CPSelectInterest_1> {
   var bgClr = Colors.transparent;
   var borderClr = KWhiteColor.withOpacity(0.2);
   List<Experience> exprience = [];
-
-  final ExperienceController expController = Get.put(ExperienceController());
 
   // List li=[
   //   "Anxiety",

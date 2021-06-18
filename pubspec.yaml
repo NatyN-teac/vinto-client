@@ -36,7 +36,9 @@ dependencies:
   logger:
   flutter_secure_storage: ^4.2.0
   rxdart: ^0.27.1
-  stripe_sdk: ^5.0.0-nullsafety.0
+  flutter_stripe: 1.0.2
+  google_maps_flutter: ^2.0.6
+  get_it: 7.0.0
 
 dev_dependencies:
   pedantic: ^1.11.0

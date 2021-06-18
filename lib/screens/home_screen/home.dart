@@ -14,22 +14,15 @@ import 'package:vinto/services/api_url.dart';
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
 
+final homeController = Get.find<HomeController>();
+
 class Homescreen extends StatefulWidget {
   @override
   _HomescreenState createState() => _HomescreenState();
 }
 
 class _HomescreenState extends State<Homescreen> {
-  final HomeController homeController = Get.put(HomeController());
-
   int _currentIndex = 0;
-  // final List<Widget> _children = [
-  //   Container(),
-  //   Container(),
-  //   Container(),
-  //   Container(),
-  //   Container(),
-  // ];
 
   void onTabTapped(int index) {
     setState(() {

@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:vinto/model/basic-user.dart';
 
 FlutterSecureStorage _storage = new FlutterSecureStorage();
 
@@ -28,6 +30,7 @@ mixin AuthBloc {
   Future initAuth() async {
     String notvirgin = await _storage.read(key: 'fresh');
     String token = await _storage.read(key: 'token');
+    String _data = await _storage.read(key: 'data');
     if ((notvirgin) == null) {
       await _storage.write(key: 'fresh', value: "rotten");
       await Future.delayed(Duration(seconds: 2));
@@ -41,34 +44,39 @@ mixin AuthBloc {
           fresh: false,
         ));
       } else {
+        var _decoded = json.decode(_data);
+
         await Future.delayed(Duration(seconds: 2));
-        _setState(state.copyWith(fresh: false, auth: true, token: token));
+        _setState(state.copyWith(
+            fresh: false,
+            auth: true,
+            profile: BasicUser.fromStorage(_decoded),
+            token: token));
       }
     }
 
     _setState(state.copyWith(state: AuthStateEnum.loaded));
   }
 
-  Future saveToken(String cookie) async {
+  Future saveToken(
+    String cookie,
+  ) async {
     await _storage.write(key: "token", value: cookie);
+
     _setState(state.copyWith(token: cookie, auth: true));
   }
 
-  Future saveUser({bool remember = false, String token}) async {
-    if (remember) {
-      await this.saveToken(
-        token,
-      );
-    } else {
-      await this.saveToken(
-        token,
-      );
-    }
+  Future saveProfile(Map<String, dynamic> data) async {
+    var _data = BasicUser.fromMap(data);
+    await _storage.write(key: "data", value: _data.toJson());
+
+    _setState(state.copyWith(profile: _data));
   }
 
   Future logout() async {
     await _storage.delete(key: 'token');
-    _setState(state.copyWith(token: null, auth: false));
+    await _storage.delete(key: 'data');
+    _setState(state.copyWith(token: null, auth: false, profile: null));
   }
 
   dispose() {
@@ -83,20 +91,27 @@ class AuthState {
   final bool fresh;
   final String token;
   final AuthStateEnum state;
+  final BasicUser profile;
   AuthState({
     this.auth = false,
     this.state = AuthStateEnum.loading,
+    this.profile,
     @required this.fresh,
     @required this.token,
   });
 
   AuthState copyWith(
-      {bool auth, AuthStateEnum state, bool fresh, String token}) {
+      {bool auth,
+      AuthStateEnum state,
+      bool fresh,
+      String token,
+      BasicUser profile}) {
     return AuthState(
       state: state ?? this.state,
       auth: auth ?? this.auth,
       fresh: fresh ?? this.fresh,
       token: token ?? this.token,
+      profile: profile ?? this.profile,
     );
   }
 }

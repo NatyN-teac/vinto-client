@@ -14,6 +14,8 @@ import 'package:vinto/widgets/yellow_NextButton.dart';
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: deprecated_member_use
 
+final moodController = Get.find<MoodController>();
+
 class CPSelectInterest_2 extends StatefulWidget {
   final List<Interests> myInterest;
   final List<Experience> myExperience;
@@ -25,7 +27,6 @@ class CPSelectInterest_2 extends StatefulWidget {
 }
 
 class _CPSelectInterest_2State extends State<CPSelectInterest_2> {
-  final MoodController moodController = Get.put(MoodController());
   var isChecked = false;
   List<Mood> selectedMood = [];
 
