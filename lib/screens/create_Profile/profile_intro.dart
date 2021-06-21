@@ -1,8 +1,8 @@
-import 'package:vinto/blocs/appstate.dart';
+import 'package:vinto/data/blocs/appstate.dart';
 import 'package:vinto/helper/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:vinto/screens/create_Profile/create_profile.dart';
-import 'package:vinto/utils/di/get_it_config.dart';
+import 'package:vinto/utils/data/injection/get_it_config.dart';
 import 'package:vinto/widgets/light_Text.dart';
 import 'package:vinto/widgets/location_Pin.dart';
 import 'package:vinto/widgets/yellow_NextButton.dart';

@@ -36,7 +36,8 @@ dependencies:
   logger:
   flutter_secure_storage: ^4.2.0
   rxdart: ^0.27.1
-  flutter_stripe: 1.0.2
+  dartz: ^0.9.2
+  # flutter_stripe: 1.0.2
   google_maps_flutter: ^2.0.6
   get_it: 7.0.0
 

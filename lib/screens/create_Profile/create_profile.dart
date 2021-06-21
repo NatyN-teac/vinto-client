@@ -3,7 +3,7 @@ import 'package:vinto/helper/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:vinto/widgets/light_Text.dart';
 import 'package:vinto/widgets/location_Pin.dart';
-import 'cp_Select_Interest.dart';
+import 'interest_form.dart';
 
 enum select { yes, no }
 
@@ -44,7 +44,7 @@ class _Create_ProfileState extends State<Create_Profile> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.off(CPSelectInterest());
+                        Get.off(InterestForm());
                       },
                       child: Container(
                         padding:
@@ -70,7 +70,7 @@ class _Create_ProfileState extends State<Create_Profile> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.off(CPSelectInterest());
+                        Get.off(InterestForm());
                       },
                       child: Container(
                         padding:

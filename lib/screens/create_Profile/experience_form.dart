@@ -4,7 +4,7 @@ import 'package:vinto/helper/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:vinto/model/experience.dart';
 import 'package:vinto/model/interests.dart';
-import 'package:vinto/screens/create_Profile/cp_Select_Interest_2.dart';
+import 'package:vinto/screens/create_Profile/mood_form.dart';
 import 'package:vinto/widgets/light_Text.dart';
 import 'package:vinto/widgets/location_Pin.dart';
 import 'package:vinto/widgets/yellow_NextButton.dart';
@@ -15,37 +15,22 @@ import 'package:vinto/widgets/yellow_NextButton.dart';
 
 final expController = Get.find<ExperienceController>();
 
-class CPSelectInterest_1 extends StatefulWidget {
+class ExperienceForm extends StatefulWidget {
   final List<Interests> my_selected_interests;
 
-  const CPSelectInterest_1({Key key, this.my_selected_interests})
-      : super(key: key);
+  const ExperienceForm({Key key, this.my_selected_interests}) : super(key: key);
 
   @override
-  _CPSelectInterest_1State createState() => _CPSelectInterest_1State();
+  _ExperienceFormState createState() => _ExperienceFormState();
 }
 
-class _CPSelectInterest_1State extends State<CPSelectInterest_1> {
+class _ExperienceFormState extends State<ExperienceForm> {
   var bgClr = Colors.transparent;
   var borderClr = KWhiteColor.withOpacity(0.2);
   List<Experience> exprience = [];
 
-  // List li=[
-  //   "Anxiety",
-  //   "Migraines",
-  //   "Depression",
-  //   "Cramps",
-  //   "Stomach Pain",
-  //   "Arthritis",
-  //   "Fatigue",
-  //   "Chest Pain",
-  //   "Trouble Sleeping",
-  //   "Other",
-  // ];
-
   @override
   Widget build(BuildContext context) {
-    print("hello interests: ${widget.my_selected_interests}");
     return SafeArea(
       child: Scaffold(body: Obx(() {
         if (expController.isLoading.value)
@@ -86,11 +71,6 @@ class _CPSelectInterest_1State extends State<CPSelectInterest_1> {
                 //Diseases
                 Container(
                     height: 50,
-                    // crossAxisAlignment: WrapCrossAlignment.start,
-                    // alignment: WrapAlignment.start,
-                    // direction: Axis.horizontal,
-                    // runSpacing: 10.0,
-                    // spacing: 10.0,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: expController.experienceList.length,
@@ -108,7 +88,6 @@ class _CPSelectInterest_1State extends State<CPSelectInterest_1> {
                                 exprience.removeAt(ind);
                               }
                             });
-                            print("experience: $exprience");
                           },
                           child: Container(
                             margin: const EdgeInsets.only(left: 5),
@@ -152,7 +131,7 @@ class _CPSelectInterest_1State extends State<CPSelectInterest_1> {
                     yellowButton(
                         "NEXT",
                         100.0,
-                        CPSelectInterest_2(
+                        MoodForm(
                           myInterest: widget.my_selected_interests,
                           myExperience: exprience,
                         )),

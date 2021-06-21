@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:vinto/model/experience.dart';
 import 'package:vinto/model/interests.dart';
 import 'package:vinto/model/mood.dart';
-import 'package:vinto/screens/create_Profile/cp_Taste.dart';
+import 'package:vinto/screens/create_Profile/taste_form.dart';
 import 'package:vinto/widgets/light_Text.dart';
 import 'package:vinto/widgets/location_Pin.dart';
 import 'package:vinto/widgets/yellow_NextButton.dart';
@@ -16,17 +16,17 @@ import 'package:vinto/widgets/yellow_NextButton.dart';
 
 final moodController = Get.find<MoodController>();
 
-class CPSelectInterest_2 extends StatefulWidget {
+class MoodForm extends StatefulWidget {
   final List<Interests> myInterest;
   final List<Experience> myExperience;
 
-  const CPSelectInterest_2({Key key, this.myInterest, this.myExperience})
+  const MoodForm({Key key, this.myInterest, this.myExperience})
       : super(key: key);
   @override
-  _CPSelectInterest_2State createState() => _CPSelectInterest_2State();
+  _MoodFormState createState() => _MoodFormState();
 }
 
-class _CPSelectInterest_2State extends State<CPSelectInterest_2> {
+class _MoodFormState extends State<MoodForm> {
   var isChecked = false;
   List<Mood> selectedMood = [];
 
@@ -111,14 +111,11 @@ class _CPSelectInterest_2State extends State<CPSelectInterest_2> {
                                         } else {
                                           isChecked = false;
                                         }
-                                        // isChecked = !isChecked;
                                       });
                                     },
                                   ),
                                 ),
                                 onChanged: (value) {
-                                  print("valu: $value");
-
                                   // isChecked = !isChecked;
                                   if (value == true) {
                                     setState(() {
@@ -158,7 +155,7 @@ class _CPSelectInterest_2State extends State<CPSelectInterest_2> {
                       yellowButton(
                           "NEXT",
                           100.0,
-                          CP_Taste(
+                          TasteForm(
                             myExperience: widget.myExperience,
                             myInterest: widget.myInterest,
                             myMood: selectedMood,

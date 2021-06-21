@@ -16,19 +16,19 @@ import 'package:vinto/widgets/location_Pin.dart';
 
 final tasteController = Get.find<TasteController>();
 
-class CP_Taste extends StatefulWidget {
+class TasteForm extends StatefulWidget {
   final List<Interests> myInterest;
   final List<Experience> myExperience;
   final List<Mood> myMood;
 
-  const CP_Taste({Key key, this.myInterest, this.myExperience, this.myMood})
+  const TasteForm({Key key, this.myInterest, this.myExperience, this.myMood})
       : super(key: key);
 
   @override
-  _CP_TasteState createState() => _CP_TasteState();
+  _TasteFormState createState() => _TasteFormState();
 }
 
-class _CP_TasteState extends State<CP_Taste> {
+class _TasteFormState extends State<TasteForm> {
   List<Taste> selectedTastes = [];
 
   @override

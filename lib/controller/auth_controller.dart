@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vinto/blocs/appstate.dart';
+import 'package:vinto/data/blocs/appstate.dart';
 import 'package:vinto/helper/loading.dart';
 import 'package:vinto/model/user.dart';
 import 'package:vinto/screens/create_Profile/profile_intro.dart';
 import 'package:vinto/screens/register/sign_In.dart';
 import 'package:vinto/services/api_url.dart';
-import 'package:vinto/utils/di/get_it_config.dart';
+import 'package:vinto/utils/data/injection/get_it_config.dart';
 
 final _appstate = getIt.get<AppState>();
 

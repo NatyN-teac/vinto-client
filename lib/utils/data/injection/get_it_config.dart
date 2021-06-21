@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:vinto/blocs/appstate.dart';
 import 'package:vinto/controller/auth_controller.dart';
 import 'package:vinto/controller/checkout_controller.dart';
 import 'package:vinto/controller/experience_controller.dart';
@@ -8,6 +7,7 @@ import 'package:vinto/controller/home_controller.dart';
 import 'package:vinto/controller/interest_controller.dart';
 import 'package:vinto/controller/mood_controller.dart';
 import 'package:vinto/controller/taste_controller.dart';
+import 'package:vinto/data/blocs/appstate.dart';
 
 GetIt getIt = GetIt.instance;
 
