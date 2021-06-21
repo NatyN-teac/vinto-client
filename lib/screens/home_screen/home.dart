@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vinto/controller/home_controller.dart';
+import 'package:vinto/data/blocs/location.dart';
+import 'package:vinto/data/blocs/product/recommended.dart';
 import 'package:vinto/helper/colors.dart';
 import 'package:vinto/helper/screensize.dart';
 import 'package:vinto/model/product.dart';
@@ -11,6 +13,7 @@ import 'package:vinto/screens/popular_in_your_area/popular.dart';
 import 'package:vinto/screens/result_screen/Result.dart';
 import 'package:vinto/screens/shop_near_me/shop_near.dart';
 import 'package:vinto/services/api_url.dart';
+import 'package:vinto/utils/data/injection/get_it_config.dart';
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
 
@@ -40,9 +43,7 @@ class Homescreen extends StatelessWidget {
             physics: NeverScrollableScrollPhysics(),
             children: [
               _HomeScreen(),
-              Shopnearscreen(
-                nearybyProducts: homeController.nearby,
-              ),
+              Shopnearscreen(),
               Searchscreen(),
               Cartscreen(),
               Resultscreen()
@@ -51,6 +52,8 @@ class Homescreen extends StatelessWidget {
     );
   }
 }
+
+final _location = getIt.get<LocationBloc>();
 
 class _HomeScreen extends StatelessWidget {
   const _HomeScreen({Key key}) : super(key: key);
@@ -73,53 +76,78 @@ class _HomeScreen extends StatelessWidget {
             SizedBox(
               height: vert_block * 1.5,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.location_on_rounded,
-                          size: 10,
-                          color: Colors.red,
-                        ),
-                        Text(
-                          'Delievry',
-                          style: TextStyle(
-                              fontSize: vert_block * 1.4,
-                              color: Mycolors.graytext),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: vert_block * 0.4,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Birmingham, AL',
-                          style: TextStyle(
-                              fontSize: vert_block * 2,
-                              fontFamily: 'Gill medium',
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        Icon(
-                          Icons.keyboard_arrow_down_sharp,
-                          size: 12,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Container(
-                    width: horz_block * 8,
-                    child: Image.asset('assets/profile.png'))
-              ],
+            SafeArea(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.location_on_rounded,
+                            size: 13,
+                            color: Mycolors.green,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'Delievry',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: vert_block * 1.4,
+                                color: Mycolors.graytext),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      StreamBuilder<LocationLoadingState>(
+                        stream: _location.locationStateStream,
+                        builder: (BuildContext context, snapshot) {
+                          var _ = _location.location;
+
+                          if (_.status == LoadingState.loading) {
+                            return Container();
+                          } else {
+                            return _.place.fold(
+                                (l) => TextButton.icon(
+                                    onPressed: () {
+                                      _location.initLocation();
+                                    },
+                                    icon: Icon(Icons.restart_alt_rounded),
+                                    label: Text("retry")),
+                                (r) => Row(
+                                      children: [
+                                        Text(
+                                          '${r.street}, ${r.name}',
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              fontFamily: 'Gill medium',
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        Icon(
+                                          Icons.keyboard_arrow_down_sharp,
+                                          size: 12,
+                                        ),
+                                      ],
+                                    ));
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  Container(
+                      width: horz_block * 8,
+                      child: Image.asset('assets/profile.png'))
+                ],
+              ),
             ),
             SizedBox(
               height: vert_block * 2,

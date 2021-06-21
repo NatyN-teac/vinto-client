@@ -59,7 +59,7 @@ class ProductService {
   Future<Either<BasicFailure, List<Product>>> getNearby() async {
     try {
       var response = await dioclient.get(
-          "${ApiEndPoints.BASE_URL}products_around_me",
+          "${ApiEndPoints.BASE_URL}products/products_around_me",
           options: Options(headers: DataCommons.authHeader));
 
       var result =

@@ -8,11 +8,20 @@ import 'package:vinto/controller/interest_controller.dart';
 import 'package:vinto/controller/mood_controller.dart';
 import 'package:vinto/controller/taste_controller.dart';
 import 'package:vinto/data/blocs/appstate.dart';
+import 'package:vinto/data/blocs/location.dart';
+import 'package:vinto/data/blocs/product/nearby-products.dart';
+import 'package:vinto/data/blocs/product/popular.dart';
+import 'package:vinto/data/blocs/product/recommended.dart';
 
 GetIt getIt = GetIt.instance;
 
 void initInjector() {
   getIt.registerSingleton<AppState>(new AppState());
+
+  getIt.registerLazySingleton(() => NearbyBloc());
+  getIt.registerLazySingleton(() => PopularBloc());
+  getIt.registerLazySingleton(() => RecommendedBloc());
+  getIt.registerLazySingleton(() => LocationBloc());
 
   Get.lazyPut(() => AuthController());
   Get.lazyPut(() => ExperienceController());

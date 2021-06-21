@@ -70,22 +70,18 @@ class HomeController extends GetxController {
       token = pref.getString("token");
 
       isLoading(true);
-      dio.options.headers["Authorization"] = "Bearer $token";
       var response = await dio.get(
         "${ApiEndPoints.BASE_URL}products",
+        options: Options(headers: DataCommons.authHeader),
       );
-      print("respon: ${response.data}");
       if (response.statusCode == 200) {
-        print("res: ${response.data}");
         var result =
             (response.data as List).map((e) => Product.fromJson(e)).toList();
-        print("product: ${result.length}");
         popularProducts.addAll(result);
       }
       isLoading(false);
     } on DioError catch (e) {
       isLoading(false);
-      print('error is ${e.response}');
       Get.snackbar('Error'.tr, 'Error while fetching popular products!'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
@@ -100,22 +96,19 @@ class HomeController extends GetxController {
       token = pref.getString("token");
 
       isLoading(true);
-      dio.options.headers["Authorization"] = "Bearer $token";
       var response = await dio.get(
         "${ApiEndPoints.BASE_URL}products/products_around_me",
+        options: Options(headers: DataCommons.authHeader),
       );
 
       if (response.statusCode == 200) {
-        print("res: ${response.data}");
         var result =
             (response.data as List).map((e) => Product.fromJson(e)).toList();
-        print("product: ${result.length}");
         nearby.addAll(result);
       }
       isLoading(false);
     } on DioError catch (e) {
       isLoading(false);
-      print('error is ${e.response}');
       Get.snackbar('Error'.tr, 'Error while fetching popular products!'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
