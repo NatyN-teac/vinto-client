@@ -1,19 +1,17 @@
-import 'package:get/get.dart';
-import 'package:vinto/controller/experience_controller.dart';
 import 'package:vinto/helper/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:vinto/model/experience.dart';
 import 'package:vinto/model/interests.dart';
 import 'package:vinto/screens/create_Profile/mood_form.dart';
+import 'package:vinto/services/profile/service.dart';
 import 'package:vinto/widgets/light_Text.dart';
 import 'package:vinto/widgets/location_Pin.dart';
 import 'package:vinto/widgets/yellow_NextButton.dart';
+import 'package:dartz/dartz.dart' as dartz;
 
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: deprecated_member_use
-
-final expController = Get.find<ExperienceController>();
 
 class ExperienceForm extends StatefulWidget {
   final List<Interests> my_selected_interests;
@@ -29,19 +27,145 @@ class _ExperienceFormState extends State<ExperienceForm> {
   var borderClr = KWhiteColor.withOpacity(0.2);
   List<Experience> exprience = [];
 
+  bool isLoading = true;
+  dartz.Either<BasicFailure, List<Experience>> _result;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    getInterests();
+    super.initState();
+  }
+
+  Future getInterests() async {
+    setState(() {
+      isLoading = true;
+    });
+    final _ = await ProfilePreferenceService().getExperiences();
+
+    setState(() {
+      _result = _;
+      isLoading = false;
+    });
+  }
+
+  List<Widget> _resolver(
+    BuildContext context,
+  ) {
+    if (isLoading) {
+      return [
+        SliverToBoxAdapter(
+            child: Center(
+          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            SizedBox(
+              child: CircularProgressIndicator(
+                strokeWidth: 1,
+              ),
+              width: 60,
+              height: 60,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Text('loading experiences...'),
+            )
+          ]),
+        ))
+      ];
+    } else {
+      return [
+        _result.fold(
+            (l) => SliverToBoxAdapter(
+                  child: Center(
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Icon(
+                            Icons.error_outline,
+                            color: Colors.white,
+                            size: 60,
+                          ),
+                          SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: Text(l.message),
+                          ),
+                          SizedBox(height: 20),
+                          TextButton.icon(
+                              onPressed: () {
+                                getInterests();
+                              },
+                              icon: Icon(
+                                Icons.refresh,
+                                color: Colors.white,
+                              ),
+                              label: Text("retry",
+                                  style: TextStyle(color: Colors.white)))
+                        ]),
+                  ),
+                ),
+            (r) => SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          if (exprience.contains(r[index])) {
+                            setState(() {
+                              exprience.remove(r[index]);
+                            });
+                          } else {
+                            setState(() {
+                              exprience.add(r[index]);
+                            });
+                          }
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 20),
+                          padding: EdgeInsets.only(
+                              left: 15, right: 15, top: 16, bottom: 12),
+                          decoration: BoxDecoration(
+                            color: exprience.contains(r[index])
+                                ? KWhiteColor.withOpacity(0.4)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(9),
+                            border: Border.all(
+                              color: borderClr,
+                            ),
+                          ),
+                          child: Text(
+                            "${r[index].name}",
+                            style: TextStyle(
+                              color: KWhiteColor,
+                              fontSize: 13,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: r.length,
+                  ),
+                ))
+      ];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(body: Obx(() {
-        if (expController.isLoading.value)
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        else
-          return Container(
-            decoration: mainBg,
-            child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      child: Scaffold(
+          body: Container(
+        decoration: mainBg,
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+                child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
                   height: 40,
@@ -66,81 +190,31 @@ class _ExperienceFormState extends State<ExperienceForm> {
                   ),
                 ),
                 SizedBox(
-                  height: 70,
-                ),
-                //Diseases
-                Container(
-                    height: 50,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: expController.experienceList.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              if (!exprience.contains(
-                                  expController.experienceList[index])) {
-                                exprience
-                                    .add(expController.experienceList[index]);
-                              } else {
-                                var ind = exprience.indexOf(
-                                    expController.experienceList[index]);
-                                exprience.removeAt(ind);
-                              }
-                            });
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.only(left: 5),
-                            padding: EdgeInsets.only(
-                                left: 15, right: 15, top: 16, bottom: 12),
-                            decoration: BoxDecoration(
-                              color: exprience.contains(
-                                      expController.experienceList[index])
-                                  ? KWhiteColor.withOpacity(0.4)
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(9),
-                              border: Border.all(
-                                color: borderClr,
-                              ),
-                            ),
-                            child: FittedBox(
-                              child: Text(
-                                "${expController.experienceList[index].name}",
-                                style: TextStyle(
-                                  color: KWhiteColor,
-                                  fontSize: 13,
-                                  letterSpacing: 0.2,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-
-                      //   expController.experienceList.length, (index) {
-                      //
-                      // }
-                    )),
-
-                SizedBox(
-                  height: 60,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    yellowButton(
-                        "NEXT",
-                        100.0,
-                        MoodForm(
-                          myInterest: widget.my_selected_interests,
-                          myExperience: exprience,
-                        )),
-                  ],
+                  height: 30,
                 ),
               ],
-            ),
-          );
-      })),
+            )),
+            ..._resolver(context),
+            SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  yellowButton(
+                      "NEXT",
+                      100.0,
+                      MoodForm(
+                        myInterest: widget.my_selected_interests,
+                        myExperience: exprience,
+                      )),
+                  SizedBox(
+                    width: 30,
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      )),
     );
   }
 }

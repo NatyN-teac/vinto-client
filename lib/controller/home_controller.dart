@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vinto/model/product.dart';
 import 'package:vinto/services/api_url.dart';
+import 'package:vinto/utils/data/commons.dart';
 
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
@@ -44,13 +45,9 @@ class HomeController extends GetxController {
       myPostdata["mood"] = moods.split(',');
       myPostdata["taste"] = tastes.split(',');
 
-      print("post data: $tastes");
-
       isLoading(true);
-      dio.options.headers["Authorization"] = "Bearer $token";
       var response = await dio.post("${ApiEndPoints.BASE_URL}products/search",
-          data: myPostdata);
-      print("res: ${response.data}");
+          options: Options(headers: DataCommons.authHeader), data: myPostdata);
       if (response.statusCode == 200) {
         var result =
             (response.data as List).map((e) => Product.fromJson(e)).toList();
@@ -59,7 +56,6 @@ class HomeController extends GetxController {
       isLoading(false);
     } on DioError catch (e) {
       isLoading(false);
-      print('error is ${e.response}');
       Get.snackbar('Error'.tr, 'Error while fetching Intests!'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),

@@ -1,20 +1,18 @@
-import 'package:get/get.dart';
-import 'package:vinto/controller/mood_controller.dart';
 import 'package:vinto/helper/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:vinto/model/experience.dart';
 import 'package:vinto/model/interests.dart';
 import 'package:vinto/model/mood.dart';
 import 'package:vinto/screens/create_Profile/taste_form.dart';
+import 'package:vinto/services/profile/service.dart';
 import 'package:vinto/widgets/light_Text.dart';
 import 'package:vinto/widgets/location_Pin.dart';
 import 'package:vinto/widgets/yellow_NextButton.dart';
+import 'package:dartz/dartz.dart' as dartz;
 
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: deprecated_member_use
-
-final moodController = Get.find<MoodController>();
 
 class MoodForm extends StatefulWidget {
   final List<Interests> myInterest;
@@ -30,18 +28,169 @@ class _MoodFormState extends State<MoodForm> {
   var isChecked = false;
   List<Mood> selectedMood = [];
 
+  bool isLoading = true;
+  dartz.Either<BasicFailure, List<Mood>> _result;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    getInterests();
+    super.initState();
+  }
+
+  Future getInterests() async {
+    setState(() {
+      isLoading = true;
+    });
+    final _ = await ProfilePreferenceService().getMoods();
+
+    setState(() {
+      _result = _;
+      isLoading = false;
+    });
+  }
+
+  List<Widget> _resolver(
+    BuildContext context,
+  ) {
+    if (isLoading) {
+      return [
+        SliverToBoxAdapter(
+            child: Center(
+          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            SizedBox(
+              child: CircularProgressIndicator(
+                strokeWidth: 1,
+              ),
+              width: 60,
+              height: 60,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Text('loading moods...'),
+            )
+          ]),
+        ))
+      ];
+    } else {
+      return [
+        _result.fold(
+            (l) => SliverToBoxAdapter(
+                  child: Center(
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Icon(
+                            Icons.error_outline,
+                            color: Colors.white,
+                            size: 60,
+                          ),
+                          SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: Text(l.message),
+                          ),
+                          SizedBox(height: 20),
+                          TextButton.icon(
+                              onPressed: () {
+                                getInterests();
+                              },
+                              icon: Icon(
+                                Icons.refresh,
+                                color: Colors.white,
+                              ),
+                              label: Text("retry",
+                                  style: TextStyle(color: Colors.white)))
+                        ]),
+                  ),
+                ),
+            (r) => SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return Container(
+                          height: 48,
+                          child: Theme(
+                            data: Theme.of(context).copyWith(
+                              unselectedWidgetColor: Colors.transparent,
+                            ),
+                            child: CheckboxListTile(
+                              value: selectedMood.contains(r[index]),
+                              secondary: Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                    color: KWhiteColor,
+                                    border: Border.all(
+                                      color: KLightGreyColor,
+                                    ),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Checkbox(
+                                  value: selectedMood.contains(r[index]),
+                                  activeColor: Colors.transparent,
+                                  checkColor: Colors.black,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      if (selectedMood.contains(r[index])) {
+                                        isChecked = true;
+                                      } else {
+                                        isChecked = false;
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                              onChanged: (value) {
+                                // isChecked = !isChecked;
+                                if (value == true) {
+                                  setState(() {
+                                    isChecked = false;
+                                    selectedMood.add(r[index]);
+                                  });
+                                } else {
+                                  setState(() {
+                                    isChecked = true;
+                                    selectedMood.remove(r[index]);
+                                  });
+                                }
+                              },
+                              checkColor: Colors.transparent,
+                              activeColor: Colors.transparent,
+                              title: Text(
+                                "${r[index].name}",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: KWhiteColor,
+                                  letterSpacing: 0.3,
+                                ),
+                              ),
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 15),
+                            ),
+                          ));
+                    },
+                    childCount: r.length,
+                  ),
+                ))
+      ];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Obx(() {
-          if (moodController.isLoading.value)
-            return Center(child: CircularProgressIndicator());
-          else
-            return Container(
-              decoration: mainBg,
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        decoration: mainBg,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
                     height: 40,
@@ -75,98 +224,31 @@ class _MoodFormState extends State<MoodForm> {
                   SizedBox(
                     height: 40,
                   ),
-                  ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: moodController.moodList.length,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return Container(
-                            height: 48,
-                            child: Theme(
-                              data: Theme.of(context).copyWith(
-                                unselectedWidgetColor: Colors.transparent,
-                              ),
-                              child: CheckboxListTile(
-                                value: selectedMood
-                                    .contains(moodController.moodList[index]),
-                                secondary: Container(
-                                  width: 20,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                      color: KWhiteColor,
-                                      border: Border.all(
-                                        color: KLightGreyColor,
-                                      ),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Checkbox(
-                                    value: selectedMood.contains(
-                                        moodController.moodList[index]),
-                                    activeColor: Colors.transparent,
-                                    checkColor: Colors.black,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        if (selectedMood.contains(
-                                            moodController.moodList[index])) {
-                                          isChecked = true;
-                                        } else {
-                                          isChecked = false;
-                                        }
-                                      });
-                                    },
-                                  ),
-                                ),
-                                onChanged: (value) {
-                                  // isChecked = !isChecked;
-                                  if (value == true) {
-                                    setState(() {
-                                      isChecked = false;
-                                      selectedMood
-                                          .add(moodController.moodList[index]);
-                                    });
-                                  } else {
-                                    setState(() {
-                                      isChecked = true;
-                                      selectedMood.remove(
-                                          moodController.moodList[index]);
-                                    });
-                                  }
-                                },
-                                checkColor: Colors.transparent,
-                                activeColor: Colors.transparent,
-                                title: Text(
-                                  "${moodController.moodList[index].name}",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: KWhiteColor,
-                                    letterSpacing: 0.3,
-                                  ),
-                                ),
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 15),
-                              ),
-                            ));
-                      }),
-                  SizedBox(
-                    height: 60,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      yellowButton(
-                          "NEXT",
-                          100.0,
-                          TasteForm(
-                            myExperience: widget.myExperience,
-                            myInterest: widget.myInterest,
-                            myMood: selectedMood,
-                          )),
-                    ],
-                  ),
                 ],
               ),
-            );
-        }),
-      ),
+            ),
+            ..._resolver(context),
+            SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  yellowButton(
+                      "NEXT",
+                      100.0,
+                      TasteForm(
+                        myExperience: widget.myExperience,
+                        myInterest: widget.myInterest,
+                        myMood: selectedMood,
+                      )),
+                  SizedBox(
+                    width: 30,
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      )),
     );
   }
 }

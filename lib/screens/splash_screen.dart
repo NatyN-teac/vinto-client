@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
             if (_appstate.state.state == AuthStateEnum.loading) {
               return _Splash();
             } else {
-              return !_appstate.state.auth ? Homescreen() : SignIn();
+              return _appstate.state.auth ? Homescreen() : SignIn();
             }
           }),
     );

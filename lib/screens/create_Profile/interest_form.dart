@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:vinto/model/interests.dart';
 import 'package:vinto/screens/create_Profile/experience_form.dart';
 import 'package:vinto/services/api_url.dart';
-import 'package:vinto/services/profile/interests.dart';
+import 'package:vinto/services/profile/service.dart';
 import 'package:vinto/widgets/location_Pin.dart';
 import 'package:vinto/widgets/yellow_NextButton.dart';
 
@@ -33,7 +33,7 @@ class _InterestFormState extends State<InterestForm> {
     setState(() {
       isLoading = true;
     });
-    final _ = await InterestService().getInterests();
+    final _ = await ProfilePreferenceService().getInterests();
 
     setState(() {
       _result = _;
