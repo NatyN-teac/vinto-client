@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vinto/model/product.dart';
 import 'package:vinto/services/api_url.dart';
@@ -32,6 +33,10 @@ class HomeController extends GetxController {
   String tastes;
 
   searchProductForRecommendation() async {
+    isLoading.update((val) {
+      val = true;
+    });
+
     try {
       SharedPreferences pref = await SharedPreferences.getInstance();
       token = pref.getString("token");
@@ -45,7 +50,6 @@ class HomeController extends GetxController {
       myPostdata["mood"] = moods.split(',');
       myPostdata["taste"] = tastes.split(',');
 
-      isLoading(true);
       var response = await dio.post("${ApiEndPoints.BASE_URL}products/search",
           options: Options(headers: DataCommons.authHeader), data: myPostdata);
       if (response.statusCode == 200) {
@@ -53,9 +57,14 @@ class HomeController extends GetxController {
             (response.data as List).map((e) => Product.fromJson(e)).toList();
         recommendedProducts.addAll(result);
       }
-      isLoading(false);
-    } on DioError catch (e) {
-      isLoading(false);
+      isLoading.update((val) {
+        val = false;
+      });
+    } on DioError {
+      isLoading.update((val) {
+        val = false;
+      });
+
       Get.snackbar('Error'.tr, 'Error while fetching Intests!'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
@@ -65,11 +74,14 @@ class HomeController extends GetxController {
   }
 
   myPopularProducts() async {
+    isLoading.update((val) {
+      val = true;
+    });
+
     try {
       SharedPreferences pref = await SharedPreferences.getInstance();
       token = pref.getString("token");
 
-      isLoading(true);
       var response = await dio.get(
         "${ApiEndPoints.BASE_URL}products",
         options: Options(headers: DataCommons.authHeader),
@@ -77,11 +89,18 @@ class HomeController extends GetxController {
       if (response.statusCode == 200) {
         var result =
             (response.data as List).map((e) => Product.fromJson(e)).toList();
+
+        Logger().d(response.data);
         popularProducts.addAll(result);
+        isLoading.update((val) {
+          val = false;
+        });
       }
-      isLoading(false);
-    } on DioError catch (e) {
-      isLoading(false);
+    } on DioError {
+      isLoading.update((val) {
+        val = false;
+      });
+
       Get.snackbar('Error'.tr, 'Error while fetching popular products!'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
@@ -91,11 +110,14 @@ class HomeController extends GetxController {
   }
 
   nearbyproducts() async {
+    isLoading.update((val) {
+      val = true;
+    });
+
     try {
       SharedPreferences pref = await SharedPreferences.getInstance();
       token = pref.getString("token");
 
-      isLoading(true);
       var response = await dio.get(
         "${ApiEndPoints.BASE_URL}products/products_around_me",
         options: Options(headers: DataCommons.authHeader),
@@ -105,10 +127,17 @@ class HomeController extends GetxController {
         var result =
             (response.data as List).map((e) => Product.fromJson(e)).toList();
         nearby.addAll(result);
+        update();
       }
-      isLoading(false);
-    } on DioError catch (e) {
-      isLoading(false);
+      isLoading.update((val) {
+        val = false;
+      });
+      update();
+    } on DioError {
+      isLoading.update((val) {
+        val = true;
+      });
+
       Get.snackbar('Error'.tr, 'Error while fetching popular products!'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),

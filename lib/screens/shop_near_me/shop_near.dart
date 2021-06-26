@@ -18,8 +18,7 @@ class Shopnearscreen extends StatelessWidget {
   Widget build(BuildContext context) {
     _nearby.getOrders();
     SizeConfig().init(context);
-    var height = SizeConfig.screenHeight;
-    var width = SizeConfig.screenWidth;
+
     var vert_block = SizeConfig.safeBlockVertical;
     return Scaffold(
       appBar: AppBar(
