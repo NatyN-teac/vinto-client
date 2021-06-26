@@ -13,13 +13,13 @@ import 'package:vinto/screens/register/sign_up.dart';
 import 'package:vinto/screens/splash_screen.dart';
 import 'package:vinto/utils/di/get_it_config.dart';
 import 'helper/constant.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Stripe.publishableKey =
-      "pk_test_51J0mHVCLaMRkYtM5S3H0HwtuzeNWJfdPltE0rJ7mq7j4MazYxsgtkS84Q6VS2yKlcaXwBGx8580cQff0579xTZwp00NLmFXPwc";
+  // Stripe.publishableKey =
+  //     "pk_test_51J0mHVCLaMRkYtM5S3H0HwtuzeNWJfdPltE0rJ7mq7j4MazYxsgtkS84Q6VS2yKlcaXwBGx8580cQff0579xTZwp00NLmFXPwc";
 
   initInjector();
   SystemChrome.setPreferredOrientations(
@@ -75,11 +75,12 @@ class PaymentScreen extends StatelessWidget {
       body: Container(
         alignment: Alignment.center,
         padding: EdgeInsets.all(16),
-        child: CardField(
-          onCardChanged: (card) {
-            print(card);
-          },
-        ),
+        child: Container()
+        // CardField(
+        //   onCardChanged: (card) {
+        //     print(card);
+        //   },
+        // ),
       ),
     );
   }
