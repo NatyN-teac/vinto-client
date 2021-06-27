@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:vinto/controller/home_controller.dart';
+
 import 'package:vinto/data/blocs/location.dart';
+import 'package:vinto/data/blocs/product/popular.dart';
 import 'package:vinto/data/blocs/product/recommended.dart';
 import 'package:vinto/helper/colors.dart';
 import 'package:vinto/helper/screensize.dart';
@@ -17,11 +17,14 @@ import 'package:vinto/utils/data/injection/get_it_config.dart';
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
 
-final homeController = Get.find<HomeController>();
+// final homeController = Get.find<HomeController>();
+
+final _homeBloc = getIt.get<PopularBloc>();
 
 class Homescreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    _homeBloc.init();
     return DefaultTabController(
       length: 5,
       child: Scaffold(
@@ -61,9 +64,7 @@ class _HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    var width = SizeConfig.screenWidth;
     var vert_block = SizeConfig.safeBlockVertical;
-    var horz_block = SizeConfig.safeBlockHorizontal;
 
     return Container(
       margin: EdgeInsets.symmetric(
@@ -96,7 +97,7 @@ class _HomeScreen extends StatelessWidget {
                             width: 5,
                           ),
                           Text(
-                            'Delievry',
+                            'Delivery',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: vert_block * 1.4,
@@ -143,9 +144,11 @@ class _HomeScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Container(
-                      width: horz_block * 8,
-                      child: Image.asset('assets/profile.png'))
+                  CircleAvatar(
+                    backgroundColor: Colors.grey.withOpacity(0.3),
+                    radius: 20,
+                    child: Icon(Icons.person),
+                  )
                 ],
               ),
             ),
@@ -186,11 +189,223 @@ class _HomeScreen extends StatelessWidget {
             SizedBox(
               height: vert_block * 1,
             ),
-            homeController.recommendedProducts.length == 0
-                ? Container(
-                    child: Center(
-                      child: Text("No product found"),
+            _RecommendedWidget(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Popular in your area',
+                  style: TextStyle(
+                    fontSize: vert_block * 2.4,
+                    fontFamily: 'SF bold',
+                    color: Colors.black,
+                    //fontWeight: FontWeight.w700
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Popularscreen()));
+                  },
+                  child: Text(
+                    'View All',
+                    style: TextStyle(
+                        fontSize: vert_block * 1.8, color: Mycolors.graytext),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: vert_block * 0.6,
+            ),
+            Text(
+              'The flavor of the week',
+              style: TextStyle(
+                fontSize: vert_block * 1.4,
+                fontFamily: 'Gill medium',
+                color: Mycolors.graytext,
+              ),
+            ),
+            SizedBox(
+              height: vert_block * 1,
+            ),
+            _PopularWidget()
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PopularWidget extends StatelessWidget {
+  const _PopularWidget({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<ProductState>(
+      stream: _homeBloc.recommendedStream,
+      builder: (BuildContext context, snapshot) {
+        if (_homeBloc.recommended.status == LoadingState.loading) {
+          return Container(
+            child: Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+              ),
+            ),
+          );
+        } else {
+          return _homeBloc.recommended.data.fold(
+              (l) => Center(
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Icon(
+                            Icons.error_outline,
+                            color: Colors.white,
+                            size: 60,
+                          ),
+                          SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: Text(l.message),
+                          ),
+                          SizedBox(height: 20),
+                          TextButton.icon(
+                              onPressed: () {
+                                _homeBloc.getOrders(reload: true);
+                              },
+                              icon: Icon(
+                                Icons.refresh,
+                                color: Colors.white,
+                              ),
+                              label: Text("retry",
+                                  style: TextStyle(color: Colors.white)))
+                        ]),
+                  ), (r) {
+            return r.isEmpty
+                ? Center(
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Icon(
+                            Icons.list_alt_outlined,
+                            color: Colors.white,
+                            size: 60,
+                          ),
+                          SizedBox(height: 20),
+                          Text("No Popular Products"),
+                          SizedBox(height: 10),
+                          TextButton.icon(
+                              onPressed: () {
+                                _homeBloc.getOrders(reload: true);
+                              },
+                              icon: Icon(
+                                Icons.refresh,
+                                color: Colors.white,
+                              ),
+                              label: Text("retry",
+                                  style: TextStyle(color: Colors.white)))
+                        ]),
+                  )
+                : GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 0.74,
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
                     ),
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    itemCount: r.length,
+                    itemBuilder: (context, index) {
+                      Product i = r[index];
+                      return Fooditem(
+                        product: i,
+                      );
+                    });
+          });
+        }
+      },
+    );
+  }
+}
+
+class _RecommendedWidget extends StatelessWidget {
+  const _RecommendedWidget({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var horz_block = SizeConfig.safeBlockHorizontal;
+    var width = SizeConfig.screenWidth;
+    var vert_block = SizeConfig.safeBlockVertical;
+
+    return StreamBuilder<ProductState>(
+      stream: _homeBloc.recommendedStream,
+      builder: (BuildContext context, snapshot) {
+        if (_homeBloc.recommended.status == LoadingState.loading) {
+          return Container(
+            child: Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+              ),
+            ),
+          );
+        } else {
+          return _homeBloc.recommended.data.fold(
+              (l) => Center(
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Icon(
+                            Icons.error_outline,
+                            color: Colors.white,
+                            size: 60,
+                          ),
+                          SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: Text(l.message),
+                          ),
+                          SizedBox(height: 20),
+                          TextButton.icon(
+                              onPressed: () {
+                                _homeBloc.getRecommended(reload: true);
+                              },
+                              icon: Icon(
+                                Icons.refresh,
+                                color: Colors.white,
+                              ),
+                              label: Text("retry",
+                                  style: TextStyle(color: Colors.white)))
+                        ]),
+                  ), (r) {
+            return r.isEmpty
+                ? Center(
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Icon(
+                            Icons.list_alt_outlined,
+                            color: Colors.white,
+                            size: 60,
+                          ),
+                          SizedBox(height: 20),
+                          Text("No Recommeded Products"),
+                          SizedBox(height: 10),
+                          TextButton.icon(
+                              onPressed: () {
+                                _homeBloc.getRecommended(reload: true);
+                              },
+                              icon: Icon(
+                                Icons.refresh,
+                                color: Colors.white,
+                              ),
+                              label: Text("retry",
+                                  style: TextStyle(color: Colors.white)))
+                        ]),
                   )
                 : Container(
                     width: width,
@@ -199,7 +414,7 @@ class _HomeScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         Image.network(
-                          '${ApiEndPoints.IMAGE_URL}/${homeController.recommendedProducts.first.image}',
+                          '${ApiEndPoints.IMAGE_URL}/${r.first.image}',
                           width: vert_block * 30,
                           height: vert_block * 30,
                         ),
@@ -212,7 +427,7 @@ class _HomeScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${homeController.recommendedProducts[0].name}',
+                                    '${r[0].name}',
                                     style: TextStyle(
                                         fontSize: vert_block * 2.1,
                                         fontFamily: 'Gill medium',
@@ -260,7 +475,7 @@ class _HomeScreen extends StatelessWidget {
                                                     color: Mycolors.green),
                                               ),
                                               Text(
-                                                '\$${homeController.recommendedProducts[0].price}',
+                                                '\$${r[0].price}',
                                                 style: TextStyle(
                                                     fontSize: vert_block * 1.4,
                                                     color: Colors.black),
@@ -356,8 +571,7 @@ class _HomeScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Cartscreen(
-                                          product: homeController
-                                              .recommendedProducts[0],
+                                          product: r[0],
                                         )));
                           },
                           child: Container(
@@ -380,77 +594,10 @@ class _HomeScreen extends StatelessWidget {
                         )
                       ],
                     ),
-                  ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Popular in your area',
-                  style: TextStyle(
-                    fontSize: vert_block * 2.4,
-                    fontFamily: 'SF bold',
-                    color: Colors.black,
-                    //fontWeight: FontWeight.w700
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Popularscreen()));
-                  },
-                  child: Text(
-                    'View All',
-                    style: TextStyle(
-                        fontSize: vert_block * 1.8, color: Mycolors.graytext),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: vert_block * 0.6,
-            ),
-            Text(
-              'The flavor of the week',
-              style: TextStyle(
-                fontSize: vert_block * 1.4,
-                fontFamily: 'Gill medium',
-                color: Mycolors.graytext,
-              ),
-            ),
-            SizedBox(
-              height: vert_block * 1,
-            ),
-            homeController.popularProducts.length == 0
-                ? Container(
-                    child: Center(
-                      child: Text("No product found"),
-                    ),
-                  )
-                : GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 0.8,
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                    ),
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
-                    itemCount: homeController.popularProducts.length,
-                    itemBuilder: (context, index) {
-                      Product I = homeController.popularProducts[index];
-                      return Fooditem(
-                        product: I,
-                      );
-                    }),
-            SizedBox(
-              height: vert_block * 10,
-            )
-          ],
-        ),
-      ),
+                  );
+          });
+        }
+      },
     );
   }
 }

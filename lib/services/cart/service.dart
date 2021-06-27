@@ -12,17 +12,16 @@ import 'package:vinto/utils/data/dio.dart';
 class CartServices {
   Future<Either<BasicFailure, List<Product>>> getItems() async {
     try {
-      var response = await dioclient.get("${ApiEndPoints.BASE_URL}my_cart",
+      var response = await dioclient.get(
+          "${ApiEndPoints.BASE_URL}carts/my_cart   ",
           options: Options(headers: DataCommons.authHeader));
+      Logger().d(response.data);
 
-      var result =
-          (response.data as List).map((e) => Product.fromJson(e)).toList();
-
-      return right(result);
+      return right([]);
     } on DioError catch (e) {
       Logger().e(e.response);
       if (e.response.statusCode > 400 && e.response.statusCode <= 500) {
-        return left(BasicFailure("Invalid "));
+        return left(BasicFailure("Invalid Auth"));
       } else if (e.error is SocketException) {
         return left(BasicFailure("Network Error"));
       } else if (e.error is HttpException) {
@@ -43,7 +42,7 @@ class CartServices {
     } on DioError catch (e) {
       Logger().e(e.response);
       if (e.response.statusCode > 400 && e.response.statusCode <= 500) {
-        return left(BasicFailure("Invalid "));
+        return left(BasicFailure("Invalid Auth"));
       } else if (e.error is SocketException) {
         return left(BasicFailure("Network Error"));
       } else if (e.error is HttpException) {

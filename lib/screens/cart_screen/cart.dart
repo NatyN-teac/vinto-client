@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vinto/controller/checkout_controller.dart';
+import 'package:vinto/data/blocs/appstate.dart';
+import 'package:vinto/data/blocs/cart.dart';
 import 'package:vinto/helper/colors.dart';
 import 'package:vinto/helper/screensize.dart';
 import 'package:vinto/model/product.dart';
-import 'package:vinto/screens/Edit_cart_screen/edit_cart.dart';
 import 'package:vinto/services/api_url.dart';
+import 'package:vinto/services/cart/service.dart';
+import 'package:vinto/utils/data/injection/get_it_config.dart';
+
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: deprecated_member_use
+final _appstate = getIt.get<AppState>();
+
+final _cartService = new CartServices();
+final _cartBloc = getIt.get<CartBloc>();
 
 class Cartscreen extends StatefulWidget {
   final Product product;
@@ -25,11 +32,12 @@ class _CartscreenState extends State<Cartscreen> {
   String username;
   TextEditingController quantityController;
 
+  bool _loading = false;
+
   getUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      email = prefs.get('username');
-      username = prefs.get('email');
+      email = _appstate.state.profile.email;
+      username = _appstate.state.profile.client.username;
     });
   }
 
@@ -40,6 +48,34 @@ class _CartscreenState extends State<Cartscreen> {
     super.initState();
   }
 
+  Future checkOut() async {
+    setState(() {
+      _loading = true;
+    });
+
+    final _result = await _cartService.addToCart({
+      "product": widget.product.sId,
+      "quantity": int.parse(quantityController.text)
+    });
+
+    _result.fold((l) {
+      Get.snackbar('Cart Error', l.message,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 3),
+          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+          colorText: Get.theme.snackBarTheme.actionTextColor);
+    }, (r) {
+      Get.snackbar('Success', "Item added to cart",
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 3),
+          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+          colorText: Get.theme.snackBarTheme.actionTextColor);
+    });
+    setState(() {
+      _loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -48,6 +84,26 @@ class _CartscreenState extends State<Cartscreen> {
     var vert_block = SizeConfig.safeBlockVertical;
     var horz_block = SizeConfig.safeBlockHorizontal;
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        leading: IconButton(
+          color: Colors.black,
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Text(
+          'Product',
+          style: TextStyle(
+              fontSize: vert_block * 2.2,
+              fontFamily: 'Gill medium',
+              color: Mycolors.blacktext,
+              fontWeight: FontWeight.w700),
+        ),
+      ),
       body: widget.product == null
           ? Center(
               child: Column(
@@ -90,29 +146,30 @@ class _CartscreenState extends State<Cartscreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                InkWell(
-                                    onTap: () {},
-                                    child: Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    )),
-                                InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Editcart()));
-                                    },
-                                    child: Icon(
-                                      Icons.edit,
-                                      color: Colors.white,
-                                    ))
-                              ],
-                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: [
+                            //     InkWell(
+                            //         onTap: () {},
+                            //         child: Icon(
+                            //           Icons.close,
+                            //           color: Colors.white,
+                            //         )),
+                            //     InkWell(
+                            //         onTap: () {
+                            //           Navigator.push(
+                            //               context,
+                            //               MaterialPageRoute(
+                            //                   builder: (context) =>
+                            //                       Editcart()));
+                            //         },
+                            //         child: Icon(
+                            //           Icons.edit,
+                            //           color: Colors.white,
+                            //         ))
+                            //   ],
+                            // ),
+
                             Expanded(child: SizedBox()),
                             Text(
                               '$email',
@@ -146,25 +203,25 @@ class _CartscreenState extends State<Cartscreen> {
                           SizedBox(
                             height: vert_block * 2,
                           ),
-                          Text(
-                            '$username',
-                            style: TextStyle(
-                              fontSize: vert_block * 2.2,
-                              color: Mycolors.blacktext3,
-                              // fontWeight: FontWeight.w700
-                            ),
-                          ),
-                          Text(
-                            'Visa Debit ********6051',
-                            style: TextStyle(
-                              fontSize: vert_block * 2.1,
-                              color: Mycolors.graytext,
-                              // fontWeight: FontWeight.w700
-                            ),
-                          ),
-                          SizedBox(
-                            height: vert_block * 4,
-                          ),
+                          // Text(
+                          //   '$username',
+                          //   style: TextStyle(
+                          //     fontSize: vert_block * 2.2,
+                          //     color: Mycolors.blacktext3,
+                          //     // fontWeight: FontWeight.w700
+                          //   ),
+                          // ),
+                          // Text(
+                          //   'Visa Debit ********6051',
+                          //   style: TextStyle(
+                          //     fontSize: vert_block * 2.1,
+                          //     color: Mycolors.graytext,
+                          //     // fontWeight: FontWeight.w700
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: vert_block * 4,
+                          // ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -240,18 +297,25 @@ class _CartscreenState extends State<Cartscreen> {
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: vert_block * 2,
-                          ),
-                          Container(
-                            width: width,
-                            height: 2,
-                            color: Mycolors.background,
-                          ),
-                          SizedBox(
-                            height: vert_block * 2,
-                          ),
+                          // SizedBox(
+                          //   height: vert_block * 2,
+                          // ),
+                          // Container(
+                          //   width: width,
+                          //   height: 2,
+                          //   color: Mycolors.background,
+                          // ),
+                          // SizedBox(
+                          //   height: vert_block * 2,
+                          // ),
                         ],
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(widget.product.description ?? ""),
                       ),
                     ),
                     Expanded(child: SizedBox()),
