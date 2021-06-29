@@ -2,41 +2,42 @@ import 'package:dartz/dartz.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:vinto/data/blocs/product/recommended.dart';
 import 'package:vinto/services/cart/service.dart';
-import 'package:vinto/model/order.dart' as order;
 import 'package:vinto/services/profile/service.dart';
+import 'package:vinto/model/order.dart' as order;
 
-final _cartRepo = new CartServices();
+final _cartRepo = CartServices();
 
-class CartBloc {
-  final _nearby = new BehaviorSubject<OrderState>.seeded(
+class OrderBloc {
+  final _orders = new BehaviorSubject<OrderState>.seeded(
       new OrderState(status: LoadingState.loading));
-  Stream<OrderState> get nearbyStream => _nearby.stream;
-  OrderState get nearby => _nearby.value;
+  Stream<OrderState> get orderStream => _orders.stream;
+  OrderState get orders => _orders.value;
 
   void _setState(OrderState _) {
-    _nearby.add(_);
+    _orders.add(_);
   }
 
   Future getOrders({bool reload = false}) async {
     if (reload) {
-      _setState(nearby.copyWith(status: LoadingState.loading));
-      final _data = await _cartRepo.getItems();
-      _setState(nearby.copyWith(status: LoadingState.loaded, data: _data));
+      _setState(orders.copyWith(status: LoadingState.loading));
+      final _data = await _cartRepo.getHistory();
+      _setState(orders.copyWith(status: LoadingState.loaded, data: _data));
     } else {
-      if ((nearby.data == null) || nearby.data.isLeft()) {
-        _setState(nearby.copyWith(status: LoadingState.loading));
-        final _data = await _cartRepo.getItems();
-        _setState(nearby.copyWith(status: LoadingState.loaded, data: _data));
+      if ((orders.data == null) || orders.data.isLeft()) {
+        _setState(orders.copyWith(status: LoadingState.loading));
+        final _data = await _cartRepo.getHistory();
+        _setState(orders.copyWith(status: LoadingState.loaded, data: _data));
       }
     }
   }
 
-  dispose() => _nearby.close();
+  dispose() => _orders.close();
 }
 
 class OrderState {
   final LoadingState status;
   final Either<BasicFailure, List<order.Order>> data;
+
   OrderState({
     this.status = LoadingState.loading,
     this.data,

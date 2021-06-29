@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vinto/data/blocs/appstate.dart';
 
 import 'package:vinto/data/blocs/location.dart';
 import 'package:vinto/data/blocs/product/popular.dart';
@@ -8,18 +9,20 @@ import 'package:vinto/helper/screensize.dart';
 import 'package:vinto/model/product.dart';
 import 'package:vinto/screens/Search_screen/search.dart';
 import 'package:vinto/screens/cart_screen/cart.dart';
+import 'package:vinto/screens/cart_screen/main-cart-screen.dart';
 import 'package:vinto/screens/home_screen/widgets/item.dart';
 import 'package:vinto/screens/popular_in_your_area/popular.dart';
 import 'package:vinto/screens/result_screen/Result.dart';
 import 'package:vinto/screens/shop_near_me/shop_near.dart';
 import 'package:vinto/services/api_url.dart';
 import 'package:vinto/utils/data/injection/get_it_config.dart';
+
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
 
-// final homeController = Get.find<HomeController>();
-
 final _homeBloc = getIt.get<PopularBloc>();
+final _appstate = getIt.get<AppState>();
+enum ProfileMenu { logout }
 
 class Homescreen extends StatelessWidget {
   @override
@@ -40,7 +43,7 @@ class Homescreen extends StatelessWidget {
                 Icon(Icons.gps_fixed),
                 Icon(Icons.search),
                 Icon(Icons.shopping_cart_outlined),
-                Icon(Icons.menu)
+                Icon(Icons.history)
               ]),
           body: TabBarView(
             physics: NeverScrollableScrollPhysics(),
@@ -48,7 +51,7 @@ class Homescreen extends StatelessWidget {
               _HomeScreen(),
               Shopnearscreen(),
               Searchscreen(),
-              Cartscreen(),
+              MainCartScreen(),
               Resultscreen()
             ],
           )),
@@ -144,11 +147,23 @@ class _HomeScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  CircleAvatar(
-                    backgroundColor: Colors.grey.withOpacity(0.3),
-                    radius: 20,
-                    child: Icon(Icons.person),
-                  )
+                  PopupMenuButton<ProfileMenu>(
+                    child: CircleAvatar(
+                      backgroundColor: Colors.grey.withOpacity(0.3),
+                      radius: 20,
+                      child: Icon(Icons.person),
+                    ),
+                    onSelected: (ProfileMenu result) {
+                      _appstate.logout();
+                    },
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<ProfileMenu>>[
+                      const PopupMenuItem<ProfileMenu>(
+                        value: ProfileMenu.logout,
+                        child: Text('logout'),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

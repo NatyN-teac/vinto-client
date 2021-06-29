@@ -7,7 +7,9 @@ import 'package:vinto/controller/interest_controller.dart';
 import 'package:vinto/controller/mood_controller.dart';
 import 'package:vinto/controller/taste_controller.dart';
 import 'package:vinto/data/blocs/appstate.dart';
+import 'package:vinto/data/blocs/cart.dart';
 import 'package:vinto/data/blocs/location.dart';
+import 'package:vinto/data/blocs/order-bloc.dart';
 import 'package:vinto/data/blocs/product/nearby-products.dart';
 import 'package:vinto/data/blocs/product/popular.dart';
 import 'package:vinto/data/blocs/search-bloc.dart';
@@ -21,6 +23,8 @@ void initInjector() {
   getIt.registerLazySingleton(() => PopularBloc());
   getIt.registerLazySingleton(() => LocationBloc());
   getIt.registerLazySingleton(() => SearchBloc());
+  getIt.registerLazySingleton(() => CartBloc());
+  getIt.registerLazySingleton(() => OrderBloc());
 
   Get.lazyPut(() => AuthController());
   Get.lazyPut(() => ExperienceController());

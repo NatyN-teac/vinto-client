@@ -100,7 +100,7 @@ class ProductService {
     try {
       var response = await dioclient.post(
           "${ApiEndPoints.BASE_URL}products/search_by_name",
-          data: {"product_name": query},
+          data: {"name": query},
           options: Options(headers: DataCommons.authHeader));
 
       var result =
@@ -108,8 +108,9 @@ class ProductService {
 
       return right(result);
     } on DioError catch (e) {
+      Logger().e(e.response);
       if (e.response.statusCode > 400 && e.response.statusCode <= 500) {
-        return left(BasicFailure("Invalid Auth"));
+        return left(BasicFailure("Server Error"));
       } else if (e.error is SocketException) {
         return left(BasicFailure("Network Error"));
       } else if (e.error is HttpException) {

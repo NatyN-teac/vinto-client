@@ -7,6 +7,7 @@ import 'package:vinto/screens/home_screen/widgets/item.dart';
 import 'package:vinto/services/profile/service.dart';
 import 'package:vinto/utils/data/injection/get_it_config.dart';
 import 'package:dartz/dartz.dart' as dartz;
+import 'package:vinto/widgets/loader.dart';
 
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
@@ -174,7 +175,7 @@ class _SearchscreenState extends State<Searchscreen> {
               //   error: (error) => SearchPlaceholder(title: errorMessages[error]),
               // );
             } else {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: Loader(color: Mycolors.green));
             }
           },
         ));

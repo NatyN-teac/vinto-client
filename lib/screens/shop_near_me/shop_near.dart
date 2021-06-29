@@ -4,7 +4,6 @@ import 'package:vinto/data/blocs/product/recommended.dart';
 import 'package:vinto/helper/colors.dart';
 import 'package:vinto/helper/screensize.dart';
 import 'package:vinto/model/product.dart';
-import 'package:vinto/screens/Dispancry_front_facing/dispancry.dart';
 import 'package:vinto/screens/home_screen/widgets/item.dart';
 import 'package:vinto/utils/data/injection/get_it_config.dart';
 
@@ -34,17 +33,17 @@ class Shopnearscreen extends StatelessWidget {
               fontWeight: FontWeight.w700),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => Dispancryfacing()));
-        },
-        backgroundColor: Colors.white,
-        child: Icon(
-          Icons.invert_colors_on_sharp,
-          color: Mycolors.green,
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.push(context,
+      //         MaterialPageRoute(builder: (context) => Dispancryfacing()));
+      //   },
+      //   backgroundColor: Colors.white,
+      //   child: Icon(
+      //     Icons.invert_colors_on_sharp,
+      //     color: Mycolors.green,
+      //   ),
+      // ),
       body: StreamBuilder<ProductState>(
         stream: _nearby.nearbyStream,
         builder: (BuildContext context, snapshot) {
