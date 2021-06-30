@@ -19,6 +19,10 @@ class SearchBloc {
   Stream<Either<BasicFailure, List<Product>>> _results;
   Stream<Either<BasicFailure, List<Product>>> get results => _results;
 
+  void resetBloc() {
+    _searchTerms.add("");
+  }
+
   void dispose() {
     _searchTerms.close();
   }

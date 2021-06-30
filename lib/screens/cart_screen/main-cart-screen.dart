@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:vinto/data/blocs/cart.dart';
+import 'package:vinto/data/blocs/order-bloc.dart';
 import 'package:vinto/data/blocs/product/recommended.dart';
 import 'package:vinto/helper/colors.dart';
 import 'package:vinto/helper/screensize.dart';
@@ -16,6 +17,7 @@ import 'package:vinto/widgets/loader.dart';
 // ignore_for_file: deprecated_member_use
 
 final _cartBloc = getIt.get<CartBloc>();
+final _order = getIt.get<OrderBloc>();
 final _cartService = new CartServices();
 
 class MainCartScreen extends StatefulWidget {
@@ -28,6 +30,7 @@ class MainCartScreen extends StatefulWidget {
 
 class _MainCartScreenState extends State<MainCartScreen> {
   bool _loading = false;
+  bool _paying = false;
 
   Future clearCart() async {
     setState(() {
@@ -52,6 +55,43 @@ class _MainCartScreenState extends State<MainCartScreen> {
 
     setState(() {
       _loading = false;
+    });
+  }
+
+  Future payForCart() async {
+    setState(() {
+      _paying = true;
+    });
+    final _result = await _cartService.pay({
+      "key":
+          "pk_test_51J0mHVCLaMRkYtM5S3H0HwtuzeNWJfdPltE0rJ7mq7j4MazYxsgtkS84Q6VS2yKlcaXwBGx8580cQff0579xTZwp00NLmFXPwc",
+      "amount": 250.99,
+      "description": "New Payment 1",
+      "email": "masresha@example.com",
+      "card": "4000056655665556",
+      "month": 6,
+      "year": 2022,
+      "cvc": 456
+    });
+
+    _result.fold((l) {
+      Get.snackbar('Payment Error'.tr, l.message,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 3),
+          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+          colorText: Get.theme.snackBarTheme.actionTextColor);
+    }, (r) {
+      Get.snackbar('Payment Success'.tr, "Successfully paid for orders",
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 3),
+          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+          colorText: Get.theme.snackBarTheme.actionTextColor);
+      _cartBloc.getOrders(reload: true);
+      _order.getOrders(reload: true);
+    });
+
+    setState(() {
+      _paying = false;
     });
   }
 
@@ -107,8 +147,14 @@ class _MainCartScreenState extends State<MainCartScreen> {
                                   elevation: 0,
                                   icon: Icon(Icons.payment),
                                   backgroundColor: Mycolors.green,
-                                  onPressed: () {},
-                                  label: Text("Pay"))
+                                  onPressed: _paying
+                                      ? () {}
+                                      : () async => payForCart(),
+                                  label: _paying
+                                      ? Loader(
+                                          color: Colors.white,
+                                        )
+                                      : Text("Pay"))
                             ],
                           );
                   });

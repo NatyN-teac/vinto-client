@@ -31,6 +31,10 @@ class OrderBloc {
     }
   }
 
+  void resetBloc() {
+    _setState(new OrderState(status: LoadingState.loading));
+  }
+
   dispose() => _orders.close();
 }
 

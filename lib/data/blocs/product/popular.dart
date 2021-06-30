@@ -57,5 +57,9 @@ class PopularBloc {
     }
   }
 
+  void resetBloc() {
+    _setState(new ProductState(status: LoadingState.loading));
+  }
+
   dispose() => _popular.close();
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:vinto/data/blocs/order-bloc.dart';
 import 'package:vinto/data/blocs/product/recommended.dart';
 import 'package:vinto/helper/colors.dart';
@@ -116,6 +117,7 @@ class _ResultscreenState extends State<Resultscreen> {
                   var _or = r[index];
                   return ListTile(
                     onTap: () {
+                      Logger().d(_or.sId + "." + _or.assignedFor.sId);
                       showQr(context, _or.sId + "." + _or.assignedFor.sId);
                     },
                     leading: Container(

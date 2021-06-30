@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:vinto/model/order.dart' as order;
-import 'package:vinto/model/product.dart';
 import 'package:vinto/services/api_url.dart';
 import 'package:vinto/services/profile/service.dart';
 import 'package:vinto/utils/data/commons.dart';
@@ -44,7 +43,7 @@ class CartServices {
 
       return right(_resu);
     } on DioError catch (e) {
-      Logger().e(e.response);
+      Logger().e(e);
       if (e.response.statusCode > 400 && e.response.statusCode <= 500) {
         return left(BasicFailure("Invalid Auth"));
       } else if (e.error is SocketException) {
@@ -78,16 +77,15 @@ class CartServices {
     }
   }
 
-  Future<Either<BasicFailure, List<Product>>> pay() async {
+  Future<Either<BasicFailure, bool>> pay(Map<String, dynamic> data) async {
     try {
-      var response = await dioclient.get(
-          "${ApiEndPoints.BASE_URL}products/products_around_me",
+      var response = await dioclient.post(
+          "${ApiEndPoints.BASE_URL}orders/payment",
+          data: data,
           options: Options(headers: DataCommons.authHeader));
+      Logger().d(response.data);
 
-      var result =
-          (response.data as List).map((e) => Product.fromJson(e)).toList();
-
-      return right(result);
+      return right(true);
     } on DioError catch (e) {
       Logger().e(e.response);
       if (e.response.statusCode > 400 && e.response.statusCode <= 500) {

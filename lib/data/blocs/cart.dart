@@ -1,9 +1,7 @@
-import 'package:dartz/dartz.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:vinto/data/blocs/order-bloc.dart';
 import 'package:vinto/data/blocs/product/recommended.dart';
 import 'package:vinto/services/cart/service.dart';
-import 'package:vinto/model/order.dart' as order;
-import 'package:vinto/services/profile/service.dart';
 
 final _cartRepo = new CartServices();
 
@@ -31,24 +29,9 @@ class CartBloc {
     }
   }
 
-  dispose() => _nearby.close();
-}
-
-class OrderState {
-  final LoadingState status;
-  final Either<BasicFailure, List<order.Order>> data;
-  OrderState({
-    this.status = LoadingState.loading,
-    this.data,
-  });
-
-  OrderState copyWith({
-    LoadingState status = LoadingState.loading,
-    Either<BasicFailure, List<order.Order>> data,
-  }) {
-    return OrderState(
-      status: status ?? this.status,
-      data: data ?? this.data,
-    );
+  void resetBloc() {
+    _setState(new OrderState(status: LoadingState.loading));
   }
+
+  dispose() => _nearby.close();
 }

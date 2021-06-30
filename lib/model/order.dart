@@ -29,7 +29,7 @@ class Order {
       this.createdBy});
 
   Order.fromJson(Map<String, dynamic> json) {
-    productOwner = json['product_owner'];
+    productOwner = json['product_owner'].toString();
     assignedFor = json['assigned_for'] != null
         ? new AssignedFor.fromJson(json['assigned_for'])
         : null;
