@@ -15,7 +15,7 @@ class ProfilePreferenceService {
   Future<Either<BasicFailure, List<Taste>>> getTastes() async {
     try {
       var response = await dioclient.get("${ApiEndPoints.BASE_URL}tastes",
-          options: Options(headers: DataCommons.authHeader));
+          options: Options(headers: DataCommons.authHeader()));
 
       var result =
           (response.data as List).map((e) => Taste.fromJson(e)).toList();
@@ -38,7 +38,7 @@ class ProfilePreferenceService {
   Future<Either<BasicFailure, List<Mood>>> getMoods() async {
     try {
       var response = await dioclient.get("${ApiEndPoints.BASE_URL}moods",
-          options: Options(headers: DataCommons.authHeader));
+          options: Options(headers: DataCommons.authHeader()));
 
       var result =
           (response.data as List).map((e) => Mood.fromJson(e)).toList();
@@ -61,7 +61,7 @@ class ProfilePreferenceService {
   Future<Either<BasicFailure, List<Interests>>> getInterests() async {
     try {
       var response = await dioclient.get("${ApiEndPoints.BASE_URL}interests",
-          options: Options(headers: DataCommons.authHeader));
+          options: Options(headers: DataCommons.authHeader()));
 
       var result =
           (response.data as List).map((e) => Interests.fromJson(e)).toList();
@@ -84,7 +84,7 @@ class ProfilePreferenceService {
   Future<Either<BasicFailure, List<Experience>>> getExperiences() async {
     try {
       var response = await dioclient.get("${ApiEndPoints.BASE_URL}experiences",
-          options: Options(headers: DataCommons.authHeader));
+          options: Options(headers: DataCommons.authHeader()));
 
       var result =
           (response.data as List).map((e) => Experience.fromJson(e)).toList();

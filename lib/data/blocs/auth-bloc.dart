@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:vinto/data/blocs/cart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vinto/data/blocs/location.dart';
-import 'package:vinto/data/blocs/order-bloc.dart';
-import 'package:vinto/data/blocs/product/nearby-products.dart';
-import 'package:vinto/data/blocs/product/popular.dart';
-import 'package:vinto/data/blocs/search-bloc.dart';
+// import 'package:logger/logger.dart';
+// import 'package:vinto/data/blocs/cart.dart';
+// import 'package:vinto/data/blocs/order-bloc.dart';
+// import 'package:vinto/data/blocs/product/nearby-products.dart';
+// import 'package:vinto/data/blocs/product/popular.dart';
+// import 'package:vinto/data/blocs/search-bloc.dart';
 import 'package:vinto/model/basic-user.dart';
 import 'package:vinto/utils/data/injection/get_it_config.dart';
 
@@ -16,11 +19,11 @@ FlutterSecureStorage _storage = new FlutterSecureStorage();
 
 final _location = getIt.get<LocationBloc>();
 
-final _nearby = getIt.get<NearbyBloc>();
-final _pop = getIt.get<PopularBloc>();
-final _search = getIt.get<SearchBloc>();
-final _cart = getIt.get<CartBloc>();
-final _order = getIt.get<OrderBloc>();
+// final _nearby = getIt.get<NearbyBloc>();
+// final _pop = getIt.get<PopularBloc>();
+// final _search = getIt.get<SearchBloc>();
+// final _cart = getIt.get<CartBloc>();
+// final _order = getIt.get<OrderBloc>();
 
 mixin AuthBloc {
   BehaviorSubject<AuthState> _state = new BehaviorSubject<AuthState>.seeded(
@@ -42,12 +45,29 @@ mixin AuthBloc {
     _setState(state.copyWith(fresh: v, auth: v));
   }
 
+  bool isPhone() => true;
+
   Future initAuth() async {
-    String notvirgin = await _storage.read(key: 'fresh');
-    String token = await _storage.read(key: 'token');
-    String _data = await _storage.read(key: 'data');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String notvirgin;
+    String token;
+    String _data;
+
+    if (isPhone()) {
+      notvirgin = await _storage.read(key: 'fresh');
+      token = await _storage.read(key: 'token_key');
+      _data = await _storage.read(key: 'data');
+    } else {
+      notvirgin = prefs.getString('fresh');
+      token = prefs.getString('token_key');
+      _data = prefs.getString('data');
+    }
+
     if ((notvirgin) == null) {
-      await _storage.write(key: 'fresh', value: "rotten");
+      isPhone()
+          ? await _storage.write(key: 'fresh', value: "rotten")
+          : await prefs.setString('fresh', "rotten");
       await Future.delayed(Duration(seconds: 2));
       _setState(state.copyWith(
         fresh: true,
@@ -78,33 +98,54 @@ mixin AuthBloc {
   Future saveToken(
     String cookie,
   ) async {
-    await _storage.write(key: "token", value: cookie);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    _setState(state.copyWith(token: cookie, auth: true));
+    isPhone()
+        ? await _storage.write(key: "token_key", value: cookie)
+        : await prefs.setString('token_key', cookie);
+
+    _setState(state.copyWith(token: cookie));
+
     _location.initLocation();
   }
 
   Future saveProfile(Map<String, dynamic> data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     var _data = BasicUser.fromMap(data);
-    await _storage.write(key: "data", value: _data.toJson());
+
+    isPhone()
+        ? await _storage.write(key: "data", value: _data.toJson())
+        : await prefs.setString('data', _data.toJson());
 
     _setState(state.copyWith(profile: _data));
+    _setState(state.copyWith(auth: true));
   }
 
   Future logout() async {
-    await _storage.delete(key: 'token');
-    await _storage.delete(key: 'data');
-    resetStates();
-    _setState(state.copyWith(token: null, auth: false, profile: null));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (isPhone()) {
+      await _storage.delete(key: 'token_key');
+      await _storage.delete(key: 'data');
+    } else {
+      await prefs.remove("token_key");
+      await prefs.remove("data");
+    }
+
+    // resetStates();
+    _setState(state.copyWith(
+      auth: true,
+    ));
   }
 
-  void resetStates() {
-    _nearby.resetBloc();
-    _pop.resetBloc();
-    _search.resetBloc();
-    _cart.resetBloc();
-    _order.resetBloc();
-  }
+  // void resetStates() {
+  //   _nearby.resetBloc();
+  //   _pop.resetBloc();
+  //   _search.resetBloc();
+  //   _cart.resetBloc();
+  //   _order.resetBloc();
+  // }
 
   dispose() {
     _state.close();

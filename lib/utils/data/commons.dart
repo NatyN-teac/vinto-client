@@ -10,11 +10,11 @@ class DataCommons {
     'Content-type': 'application/json',
     'Accept': 'application/json'
   };
-  static Map<String, String> authHeader = {
-    'Content-type': 'application/json',
-    'Accept': 'application/json',
-    'Authorization': "Bearer " + _appstate.state.token
-  };
+  static Map<String, String> authHeader() => {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': "Bearer " + _appstate.state.token
+      };
   static Map<String, String> formDataAuthHeader = {
     'Authorization': "Bearer " + _appstate.state.token
   };

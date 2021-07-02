@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:vinto/data/blocs/appstate.dart';
 import 'package:vinto/data/blocs/auth-bloc.dart';
 import 'package:vinto/screens/home_screen/home.dart';
@@ -27,9 +28,11 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<AuthState>(
-          initialData: new AuthState(fresh: null, token: null),
+          // initialData: new AuthState(fresh: null, token: null),
           stream: _appstate.authStateStream,
           builder: (context, snapshot) {
+            Logger().d("rebuilt");
+
             if (_appstate.state.state == AuthStateEnum.loading) {
               return _Splash();
             } else {

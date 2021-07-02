@@ -51,7 +51,8 @@ class HomeController extends GetxController {
       myPostdata["taste"] = tastes.split(',');
 
       var response = await dio.post("${ApiEndPoints.BASE_URL}products/search",
-          options: Options(headers: DataCommons.authHeader), data: myPostdata);
+          options: Options(headers: DataCommons.authHeader()),
+          data: myPostdata);
       if (response.statusCode == 200) {
         var result =
             (response.data as List).map((e) => Product.fromJson(e)).toList();
@@ -84,7 +85,7 @@ class HomeController extends GetxController {
 
       var response = await dio.get(
         "${ApiEndPoints.BASE_URL}products",
-        options: Options(headers: DataCommons.authHeader),
+        options: Options(headers: DataCommons.authHeader()),
       );
       if (response.statusCode == 200) {
         var result =
@@ -120,7 +121,7 @@ class HomeController extends GetxController {
 
       var response = await dio.get(
         "${ApiEndPoints.BASE_URL}products/products_around_me",
-        options: Options(headers: DataCommons.authHeader),
+        options: Options(headers: DataCommons.authHeader()),
       );
 
       if (response.statusCode == 200) {

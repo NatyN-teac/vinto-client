@@ -20,15 +20,16 @@ class ProductService {
       String experiences = pref.getString("exp");
       String tastes = pref.getString("taste");
 
-      myPostdata["interest"] = intersts.split(',');
-      myPostdata["experience"] = experiences.split(',');
-      myPostdata["mood"] = moods.split(',');
-      myPostdata["taste"] = tastes.split(',');
+      myPostdata["interest"] = intersts == null ? [] : intersts.split(',');
+      myPostdata["experience"] =
+          experiences == null ? [] : experiences.split(',');
+      myPostdata["mood"] = moods == null ? [] : moods.split(',');
+      myPostdata["taste"] = tastes == null ? [] : tastes.split(',');
 
       var response = await dioclient.post(
           "${ApiEndPoints.BASE_URL}products/search",
           data: myPostdata,
-          options: Options(headers: DataCommons.authHeader));
+          options: Options(headers: DataCommons.authHeader()));
 
       var result =
           (response.data as List).map((e) => Product.fromJson(e)).toList();
@@ -37,7 +38,7 @@ class ProductService {
     } on DioError catch (e) {
       Logger().e(e.response);
       if (e.response.statusCode > 400 && e.response.statusCode <= 500) {
-        return left(BasicFailure("Invalid Auth"));
+        return left(BasicFailure("Server Error"));
       } else if (e.error is SocketException) {
         return left(BasicFailure("Network Error"));
       } else if (e.error is HttpException) {
@@ -51,7 +52,7 @@ class ProductService {
   Future<Either<BasicFailure, List<Product>>> getPopular() async {
     try {
       var response = await dioclient.get("${ApiEndPoints.BASE_URL}products",
-          options: Options(headers: DataCommons.authHeader));
+          options: Options(headers: DataCommons.authHeader()));
 
       var result =
           (response.data as List).map((e) => Product.fromJson(e)).toList();
@@ -75,7 +76,7 @@ class ProductService {
     try {
       var response = await dioclient.get(
           "${ApiEndPoints.BASE_URL}products/products_around_me",
-          options: Options(headers: DataCommons.authHeader));
+          options: Options(headers: DataCommons.authHeader()));
 
       var result =
           (response.data as List).map((e) => Product.fromJson(e)).toList();
@@ -101,7 +102,7 @@ class ProductService {
       var response = await dioclient.post(
           "${ApiEndPoints.BASE_URL}products/search_by_name",
           data: {"name": query},
-          options: Options(headers: DataCommons.authHeader));
+          options: Options(headers: DataCommons.authHeader()));
 
       var result =
           (response.data as List).map((e) => Product.fromJson(e)).toList();

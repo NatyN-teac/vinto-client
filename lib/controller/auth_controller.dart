@@ -31,14 +31,20 @@ class AuthController extends GetxController {
       if (result.statusCode == 200) {
         UserModel user = UserModel.fromJson(result.data);
 
-        await Future.wait([
-          _appstate.saveToken(result.data['token']),
-          _appstate.saveProfile(result.data['user'])
-        ]);
+        if (user.user.role == "client") {
+          await _appstate.saveToken(result.data['token']);
+          await _appstate.saveProfile(result.data['user']);
 
-        if (user.user.role != "user") {
           Get.to(Profile_Intro());
+        } else {
+          Get.snackbar('Invalid Role'.tr,
+              'a ${user.user.role} can not use this version !!'.tr,
+              snackPosition: SnackPosition.BOTTOM,
+              duration: Duration(seconds: 3),
+              backgroundColor: Get.theme.snackBarTheme.backgroundColor,
+              colorText: Get.theme.snackBarTheme.actionTextColor);
         }
+
         _overlayLoader.hide();
       }
     } on DioError catch (e) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vinto/data/blocs/appstate.dart';
-
 import 'package:vinto/data/blocs/location.dart';
 import 'package:vinto/data/blocs/product/popular.dart';
 import 'package:vinto/data/blocs/product/recommended.dart';
@@ -22,6 +21,8 @@ import 'package:vinto/utils/data/injection/get_it_config.dart';
 
 final _homeBloc = getIt.get<PopularBloc>();
 final _appstate = getIt.get<AppState>();
+final _location = getIt.get<LocationBloc>();
+
 enum ProfileMenu { logout }
 
 class Homescreen extends StatelessWidget {
@@ -58,8 +59,6 @@ class Homescreen extends StatelessWidget {
     );
   }
 }
-
-final _location = getIt.get<LocationBloc>();
 
 class _HomeScreen extends StatelessWidget {
   const _HomeScreen({Key key}) : super(key: key);
@@ -153,8 +152,10 @@ class _HomeScreen extends StatelessWidget {
                       radius: 20,
                       child: Icon(Icons.person),
                     ),
-                    onSelected: (ProfileMenu result) {
-                      _appstate.logout();
+                    onSelected: (ProfileMenu result) async {
+                      if (result == ProfileMenu.logout) {
+                        await _appstate.logout();
+                      }
                     },
                     itemBuilder: (BuildContext context) =>
                         <PopupMenuEntry<ProfileMenu>>[

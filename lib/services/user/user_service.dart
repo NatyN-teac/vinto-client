@@ -54,7 +54,7 @@ class UserService {
     try {
       final _data = await dioclient.put(
           "/clients/${_appstate.state.profile.client.id}",
-          options: Options(headers: DataCommons.authHeader),
+          options: Options(headers: DataCommons.authHeader()),
           data: data);
       Map<String, dynamic> _map = _data.data['user'];
 
@@ -80,7 +80,7 @@ class UserService {
       Map<String, dynamic> data) async {
     try {
       final _res = await dioclient.put("/users/${_appstate.state.profile.id}",
-          options: Options(headers: DataCommons.authHeader), data: data);
+          options: Options(headers: DataCommons.authHeader()), data: data);
       _appstate.saveProfile(_res.data);
       return right(true);
     } on DioError catch (e) {

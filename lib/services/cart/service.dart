@@ -13,7 +13,7 @@ class CartServices {
     try {
       var response = await dioclient.get(
           "${ApiEndPoints.BASE_URL}carts/my_cart",
-          options: Options(headers: DataCommons.authHeader));
+          options: Options(headers: DataCommons.authHeader()));
       // Logger().d(response.data);
       var _resu =
           (response.data as List).map((e) => order.Order.fromJson(e)).toList();
@@ -37,7 +37,7 @@ class CartServices {
     try {
       var response = await dioclient.get(
           "${ApiEndPoints.BASE_URL}orders/my_paid_orders_client",
-          options: Options(headers: DataCommons.authHeader));
+          options: Options(headers: DataCommons.authHeader()));
       var _resu =
           (response.data as List).map((e) => order.Order.fromJson(e)).toList();
 
@@ -60,7 +60,7 @@ class CartServices {
       Map<String, dynamic> data) async {
     try {
       await dioclient.post("${ApiEndPoints.BASE_URL}carts",
-          data: data, options: Options(headers: DataCommons.authHeader));
+          data: data, options: Options(headers: DataCommons.authHeader()));
 
       return right(unit);
     } on DioError catch (e) {
@@ -82,7 +82,7 @@ class CartServices {
       var response = await dioclient.post(
           "${ApiEndPoints.BASE_URL}orders/payment",
           data: data,
-          options: Options(headers: DataCommons.authHeader));
+          options: Options(headers: DataCommons.authHeader()));
       Logger().d(response.data);
 
       return right(true);
@@ -104,7 +104,7 @@ class CartServices {
     try {
       var response = await dioclient.get(
           "${ApiEndPoints.BASE_URL}carts/clear_cart",
-          options: Options(headers: DataCommons.authHeader));
+          options: Options(headers: DataCommons.authHeader()));
 
       Logger().d(response.data);
       return right(true);
