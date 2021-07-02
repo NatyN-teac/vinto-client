@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get_utils/src/platform/platform.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vinto/data/blocs/location.dart';
@@ -44,7 +45,7 @@ mixin AuthBloc {
     _setState(state.copyWith(fresh: v, auth: v));
   }
 
-  bool isPhone() => false;
+  bool isPhone() => true;
 
   Future initAuth() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

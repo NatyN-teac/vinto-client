@@ -14,14 +14,12 @@ class CartServices {
       var response = await dioclient.get(
           "${ApiEndPoints.BASE_URL}carts/my_cart",
           options: Options(headers: DataCommons.authHeader()));
-      // Logger().d(response.data);
       var _resu =
           (response.data as List).map((e) => order.Order.fromJson(e)).toList();
 
       return right(_resu);
     } on DioError catch (e) {
-      print("erro: ${e.response}");
-      Logger().e(e.response.statusCode);
+      Logger().e(e);
       if (e.response.statusCode > 400 && e.response.statusCode <= 500) {
         return left(BasicFailure("Invalid Auth"));
       } else if (e.error is SocketException) {

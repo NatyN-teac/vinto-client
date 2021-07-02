@@ -329,8 +329,8 @@ class _PopularWidget extends StatelessWidget {
                   )
                 : GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 0.74,
-                      crossAxisCount: 2,
+                      childAspectRatio: 0.8,
+                      crossAxisCount: setSizeOfGrid(context),
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                     ),
@@ -617,4 +617,8 @@ class _RecommendedWidget extends StatelessWidget {
       },
     );
   }
+}
+
+int setSizeOfGrid(BuildContext context) {
+  return MediaQuery.of(context).size.width > 700 ? 4 : 2;
 }
