@@ -54,7 +54,7 @@ class _FooditemState extends State<Fooditem> {
             Text(
               '${widget.product.name}',
               style: TextStyle(
-                fontSize: vert_block * 1.8,
+                fontSize: vert_block * 1.6,
                 fontFamily: 'SF semi',
                 color: Mycolors.blacktext,
                 //fontWeight: FontWeight.w700
@@ -63,7 +63,7 @@ class _FooditemState extends State<Fooditem> {
             Text(
               'Starts from \$ ${widget.product.price}',
               style: TextStyle(
-                fontSize: vert_block * 1.6,
+                fontSize: vert_block * 1.5,
                 //fontFamily: 'SF semi',
                 color: Mycolors.graytext,
                 //fontWeight: FontWeight.w700

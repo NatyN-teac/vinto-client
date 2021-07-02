@@ -39,7 +39,6 @@ class Product {
       this.createdBy});
 
   Product.fromJson(Map<String, dynamic> json) {
-    print("json value: ${json['price']}");
     name = json['name'];
     description = json['description'];
     price = json['price'];

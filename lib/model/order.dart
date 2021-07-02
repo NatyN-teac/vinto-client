@@ -1,5 +1,3 @@
-import 'package:vinto/model/product.dart';
-
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: deprecated_member_use
@@ -15,6 +13,7 @@ class Order {
   Product product;
   String createdAt;
   CreatedBy createdBy;
+  int quantity;
 
   Order(
       {this.productOwner,
@@ -26,10 +25,11 @@ class Order {
       this.orderBy,
       this.product,
       this.createdAt,
+      this.quantity,
       this.createdBy});
 
   Order.fromJson(Map<String, dynamic> json) {
-    productOwner = json['product_owner'];
+    productOwner = json['product_owner'].toString();
     assignedFor = json['assigned_for'] != null
         ? new AssignedFor.fromJson(json['assigned_for'])
         : null;
@@ -40,8 +40,9 @@ class Order {
     orderBy = json['order_by'] != null
         ? new AssignedFor.fromJson(json['order_by'])
         : null;
-    product =
-        json['product'] != null ? new Product.fromJson(json['product']) : null;
+
+    quantity = json['quantity'];
+    product = new Product.fromJson(json['product']);
     createdAt = json['created_at'];
     createdBy = createdBy = json['created_by'] != null
         ? new CreatedBy.fromJson(json['created_by'])
@@ -196,13 +197,10 @@ class Location {
 class Product {
   String name;
   String description;
-  double price;
+  num price;
   int rating;
   String image;
-  List<PInterest> interest;
-  List<PExperience> experience;
-  List<PMood> mood;
-  List<PTaste> taste;
+
   bool archived;
   Null archivedAt;
   Null updatedAt;
@@ -216,10 +214,6 @@ class Product {
       this.price,
       this.rating,
       this.image,
-      this.interest,
-      this.experience,
-      this.mood,
-      this.taste,
       this.archived,
       this.archivedAt,
       this.updatedAt,
@@ -228,43 +222,18 @@ class Product {
       this.createdBy});
 
   Product.fromJson(Map<String, dynamic> json) {
+
     name = json['name'];
     description = json['description'];
     price = json['price'];
     rating = json['rating'];
     image = json['image'];
-    if (json['interest'] != null) {
-      interest = new List<PInterest>();
-      json['interest'].forEach((v) {
-        interest.add(new PInterest.fromJson(v));
-      });
-    }
-    if (json['experience'] != null) {
-      experience = new List<PExperience>();
-      json['experience'].forEach((v) {
-        experience.add(new PExperience.fromJson(v));
-      });
-    }
-    if (json['mood'] != null) {
-      mood = new List<PMood>();
-      json['mood'].forEach((v) {
-        mood.add(new PMood.fromJson(v));
-      });
-    }
-    if (json['taste'] != null) {
-      taste = new List<PTaste>();
-      json['taste'].forEach((v) {
-        taste.add(new PTaste.fromJson(v));
-      });
-    }
     archived = json['archived'];
     archivedAt = json['archived_at'];
     updatedAt = json['updated_at'];
     sId = json['_id'];
     createdAt = json['created_at'];
-    createdBy = json['created_by'] != null
-        ? new CreatedBy.fromJson(json['created_by'])
-        : null;
+    createdBy = null;
   }
 
   Map<String, dynamic> toJson() {
@@ -274,18 +243,6 @@ class Product {
     data['price'] = this.price;
     data['rating'] = this.rating;
     data['image'] = this.image;
-    if (this.interest != null) {
-      data['interest'] = this.interest.map((v) => v.toJson()).toList();
-    }
-    if (this.experience != null) {
-      data['experience'] = this.experience.map((v) => v.toJson()).toList();
-    }
-    if (this.mood != null) {
-      data['mood'] = this.mood.map((v) => v.toJson()).toList();
-    }
-    if (this.taste != null) {
-      data['taste'] = this.taste.map((v) => v.toJson()).toList();
-    }
     data['archived'] = this.archived;
     data['archived_at'] = this.archivedAt;
     data['updated_at'] = this.updatedAt;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vinto/blocs/appstate.dart';
-import 'package:vinto/blocs/auth-bloc.dart';
+import 'package:vinto/data/blocs/appstate.dart';
+import 'package:vinto/data/blocs/auth-bloc.dart';
 import 'package:vinto/screens/home_screen/home.dart';
 import 'package:vinto/screens/register/sign_In.dart';
-import 'package:vinto/utils/di/get_it_config.dart';
+import 'package:vinto/utils/data/injection/get_it_config.dart';
 
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
@@ -31,7 +31,8 @@ class _SplashScreenState extends State<SplashScreen> {
           stream: _appstate.authStateStream,
           builder: (context, snapshot) {
             if (_appstate.state.state == AuthStateEnum.loading) {
-              return _Splash();
+              // return _Splash();
+              return SignIn();
             } else {
               return _appstate.state.auth ? Homescreen() : SignIn();
             }

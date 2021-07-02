@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vinto/model/product.dart';
 import 'package:vinto/services/api_url.dart';
+import 'package:vinto/utils/data/commons.dart';
 
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
@@ -31,6 +33,10 @@ class HomeController extends GetxController {
   String tastes;
 
   searchProductForRecommendation() async {
+    isLoading.update((val) {
+      val = true;
+    });
+
     try {
       SharedPreferences pref = await SharedPreferences.getInstance();
       token = pref.getString("token");
@@ -44,22 +50,21 @@ class HomeController extends GetxController {
       myPostdata["mood"] = moods.split(',');
       myPostdata["taste"] = tastes.split(',');
 
-      print("post data: $tastes");
-
-      isLoading(true);
-      dio.options.headers["Authorization"] = "Bearer $token";
       var response = await dio.post("${ApiEndPoints.BASE_URL}products/search",
-          data: myPostdata);
-      print("res: ${response.data}");
+          options: Options(headers: DataCommons.authHeader), data: myPostdata);
       if (response.statusCode == 200) {
         var result =
             (response.data as List).map((e) => Product.fromJson(e)).toList();
         recommendedProducts.addAll(result);
       }
-      isLoading(false);
-    } on DioError catch (e) {
-      isLoading(false);
-      print('error is ${e.response}');
+      isLoading.update((val) {
+        val = false;
+      });
+    } on DioError {
+      isLoading.update((val) {
+        val = false;
+      });
+
       Get.snackbar('Error'.tr, 'Error while fetching Intests!'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
@@ -69,27 +74,33 @@ class HomeController extends GetxController {
   }
 
   myPopularProducts() async {
+    isLoading.update((val) {
+      val = true;
+    });
+
     try {
       SharedPreferences pref = await SharedPreferences.getInstance();
       token = pref.getString("token");
 
-      isLoading(true);
-      dio.options.headers["Authorization"] = "Bearer $token";
       var response = await dio.get(
         "${ApiEndPoints.BASE_URL}products",
+        options: Options(headers: DataCommons.authHeader),
       );
-      print("respon: ${response.data}");
       if (response.statusCode == 200) {
-        print("res: ${response.data}");
         var result =
             (response.data as List).map((e) => Product.fromJson(e)).toList();
-        print("product: ${result.length}");
+
+        Logger().d(response.data);
         popularProducts.addAll(result);
+        isLoading.update((val) {
+          val = false;
+        });
       }
-      isLoading(false);
-    } on DioError catch (e) {
-      isLoading(false);
-      print('error is ${e.response}');
+    } on DioError {
+      isLoading.update((val) {
+        val = false;
+      });
+
       Get.snackbar('Error'.tr, 'Error while fetching popular products!'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
@@ -99,27 +110,34 @@ class HomeController extends GetxController {
   }
 
   nearbyproducts() async {
+    isLoading.update((val) {
+      val = true;
+    });
+
     try {
       SharedPreferences pref = await SharedPreferences.getInstance();
       token = pref.getString("token");
 
-      isLoading(true);
-      dio.options.headers["Authorization"] = "Bearer $token";
       var response = await dio.get(
         "${ApiEndPoints.BASE_URL}products/products_around_me",
+        options: Options(headers: DataCommons.authHeader),
       );
 
       if (response.statusCode == 200) {
-        print("res: ${response.data}");
         var result =
             (response.data as List).map((e) => Product.fromJson(e)).toList();
-        print("product: ${result.length}");
         nearby.addAll(result);
+        update();
       }
-      isLoading(false);
-    } on DioError catch (e) {
-      isLoading(false);
-      print('error is ${e.response}');
+      isLoading.update((val) {
+        val = false;
+      });
+      update();
+    } on DioError {
+      isLoading.update((val) {
+        val = true;
+      });
+
       Get.snackbar('Error'.tr, 'Error while fetching popular products!'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),

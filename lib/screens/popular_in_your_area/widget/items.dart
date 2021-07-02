@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:vinto/helper/colors.dart';
 import 'package:vinto/helper/screensize.dart';
+import 'package:vinto/model/product.dart';
 
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: deprecated_member_use
 
-class Popularitems extends StatefulWidget {
-  @override
-  _PopularitemsState createState() => _PopularitemsState();
-}
+class Popularitems extends StatelessWidget {
+  final Product product;
 
-class _PopularitemsState extends State<Popularitems> {
+  const Popularitems({Key key, this.product}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -48,7 +48,7 @@ class _PopularitemsState extends State<Popularitems> {
             height: vert_block,
           ),
           Text(
-            'Veg pizza',
+            product.name,
             style: TextStyle(
               fontSize: vert_block * 1.8,
               fontFamily: 'SF semi',
@@ -60,7 +60,7 @@ class _PopularitemsState extends State<Popularitems> {
             height: 3,
           ),
           Text(
-            'Black Tie Hoover',
+            product.description,
             style: TextStyle(
               fontSize: vert_block * 1.6,
               //fontFamily: 'SF semi',

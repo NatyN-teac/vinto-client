@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "354047950130",
+    "project_id": "vinto-fcm",
+    "storage_bucket": "vinto-fcm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:354047950130:android:7b7b8fdd2e058cbea3ab2b",
+        "android_client_info": {
+          "package_name": "com.vinto.client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "354047950130-bk3kvvj7klpfen2kcr8vqjbie0166q0r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vinto.client",
+            "certificate_hash": "0c4a48e5e93cbbdeea1797c588798a7e9e8ed24c"
+          }
+        },
+        {
+          "client_id": "354047950130-058ebrf720sqhtpjde6s4fqmcols8j64.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1VtGCKCLt-zZoOYNvLUdrh_DcpPRSgr4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "354047950130-058ebrf720sqhtpjde6s4fqmcols8j64.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

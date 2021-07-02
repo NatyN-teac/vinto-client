@@ -3,9 +3,24 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:vinto/data/blocs/cart.dart';
+import 'package:vinto/data/blocs/location.dart';
+import 'package:vinto/data/blocs/order-bloc.dart';
+import 'package:vinto/data/blocs/product/nearby-products.dart';
+import 'package:vinto/data/blocs/product/popular.dart';
+import 'package:vinto/data/blocs/search-bloc.dart';
 import 'package:vinto/model/basic-user.dart';
+import 'package:vinto/utils/data/injection/get_it_config.dart';
 
 FlutterSecureStorage _storage = new FlutterSecureStorage();
+
+final _location = getIt.get<LocationBloc>();
+
+final _nearby = getIt.get<NearbyBloc>();
+final _pop = getIt.get<PopularBloc>();
+final _search = getIt.get<SearchBloc>();
+final _cart = getIt.get<CartBloc>();
+final _order = getIt.get<OrderBloc>();
 
 mixin AuthBloc {
   BehaviorSubject<AuthState> _state = new BehaviorSubject<AuthState>.seeded(
@@ -52,6 +67,8 @@ mixin AuthBloc {
             auth: true,
             profile: BasicUser.fromStorage(_decoded),
             token: token));
+
+        _location.initLocation();
       }
     }
 
@@ -64,6 +81,7 @@ mixin AuthBloc {
     await _storage.write(key: "token", value: cookie);
 
     _setState(state.copyWith(token: cookie, auth: true));
+    _location.initLocation();
   }
 
   Future saveProfile(Map<String, dynamic> data) async {
@@ -76,7 +94,16 @@ mixin AuthBloc {
   Future logout() async {
     await _storage.delete(key: 'token');
     await _storage.delete(key: 'data');
+    resetStates();
     _setState(state.copyWith(token: null, auth: false, profile: null));
+  }
+
+  void resetStates() {
+    _nearby.resetBloc();
+    _pop.resetBloc();
+    _search.resetBloc();
+    _cart.resetBloc();
+    _order.resetBloc();
   }
 
   dispose() {
