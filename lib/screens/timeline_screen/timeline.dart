@@ -233,7 +233,7 @@ class _TimelinescreenState extends State<Timelinescreen> {
                                     fontWeight: FontWeight.w700),
                               ),
                               Text(
-                                '    Near To Me Alcolic Drinks',
+                                '    Near To Me Products',
                                 style: TextStyle(
                                     fontSize: vert_block * 2,
                                     // fontFamily: 'Gill medium',

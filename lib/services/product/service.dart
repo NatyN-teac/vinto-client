@@ -4,11 +4,13 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vinto/data/blocs/appstate.dart';
 import 'package:vinto/model/product.dart';
 import 'package:vinto/services/api_url.dart';
 import 'package:vinto/services/profile/service.dart';
 import 'package:vinto/utils/data/commons.dart';
 import 'package:vinto/utils/data/dio.dart';
+import 'package:vinto/utils/data/injection/get_it_config.dart';
 
 class ProductService {
   Future<Either<BasicFailure, List<Product>>> getRecommended() async {
@@ -30,7 +32,6 @@ class ProductService {
           "${ApiEndPoints.BASE_URL}products/search",
           data: myPostdata,
           options: Options(headers: DataCommons.authHeader()));
-
       var result =
           (response.data as List).map((e) => Product.fromJson(e)).toList();
 
@@ -59,7 +60,10 @@ class ProductService {
 
       return right(result);
     } on DioError catch (e) {
-      Logger().e(e.response);
+      Logger().e(e.response.data["error"]["status"]);
+      if (e.response.data["error"]["status"] == 400) {
+        getIt.get<AppState>().logout();
+      }
       if (e.response.statusCode > 400 && e.response.statusCode <= 500) {
         return left(BasicFailure("Invalid Auth"));
       } else if (e.error is SocketException) {
@@ -77,9 +81,9 @@ class ProductService {
       var response = await dioclient.get(
           "${ApiEndPoints.BASE_URL}products/products_around_me",
           options: Options(headers: DataCommons.authHeader()));
-
       var result =
           (response.data as List).map((e) => Product.fromJson(e)).toList();
+      Logger().d(result.length);
 
       return right(result);
     } on DioError catch (e) {

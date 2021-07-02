@@ -9,7 +9,6 @@ import 'package:vinto/services/api_url.dart';
 // ignore_for_file: deprecated_member_use
 class MoodController extends GetxController {
   Dio dio = new Dio();
-
   var moodList = List<Mood>().obs;
   var isLoading = true.obs;
 
@@ -33,7 +32,6 @@ class MoodController extends GetxController {
             (response.data as List).map((e) => Mood.fromJson(e)).toList();
         moodList.assignAll(result);
         print("res: $result");
-        // isLoading(false);
 
       }
       isLoading(false);

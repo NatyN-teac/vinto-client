@@ -79,6 +79,8 @@ class _SearchscreenState extends State<Searchscreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
+    var horz_block = SizeConfig.safeBlockHorizontal;
+
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -155,49 +157,15 @@ class _SearchscreenState extends State<Searchscreen> {
                           );
                         });
               });
-
-              // (
-              //   (users) => GridView.builder(
-              //     itemCount: users.length,
-              //     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              //       maxCrossAxisExtent: 200,
-              //       crossAxisSpacing: 10,
-              //       mainAxisSpacing: 10,
-              //       childAspectRatio: 0.8,
-              //     ),
-              //     itemBuilder: (context, index) {
-              //       return GitHubUserSearchResultTile(
-              //         user: users[index],
-              //         onSelected: (value) => close(context, value),
-              //       );
-              //     },
-              //   ),
-              //   error: (error) => SearchPlaceholder(title: errorMessages[error]),
-              // );
-            } else {
-              return Center(child: Loader(color: Mycolors.green));
+            } else if (_query.text.isEmpty) {
+              return Center(
+                child: Container(
+                    width: horz_block * 25,
+                    child: Image.asset('assets/search.png')),
+              );
             }
+            return Center(child: Loader(color: Mycolors.green));
           },
         ));
   }
 }
-
-// SizedBox(
-//             height: vert_block * 20,
-//           ),
-//           Container(
-//               width: horz_block * 25,
-//               child: Image.asset('assets/search.png')),
-//           SizedBox(
-//             height: vert_block * 2,
-//           ),
-//           Text(
-//             'Search for a brand, product, \nor dispensary',
-//             textAlign: TextAlign.center,
-//             style: TextStyle(
-//               fontSize: vert_block * 1.8,
-//               // fontFamily: 'Gill medium',
-//               color: Mycolors.graytext,
-//               // fontWeight: FontWeight.w700
-//             ),
-//           ),
