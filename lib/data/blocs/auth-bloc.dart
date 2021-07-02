@@ -45,7 +45,7 @@ mixin AuthBloc {
     _setState(state.copyWith(fresh: v, auth: v));
   }
 
-  bool isPhone() => true;
+  bool isPhone() => false;
 
   Future initAuth() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
