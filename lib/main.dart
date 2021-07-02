@@ -64,3 +64,22 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+class PaymentScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.all(16),
+        child: Container()
+        // CardField(
+        //   onCardChanged: (card) {
+        //     print(card);
+        //   },
+        // ),
+      ),
+    );
+  }
+}

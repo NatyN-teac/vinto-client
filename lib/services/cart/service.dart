@@ -20,7 +20,8 @@ class CartServices {
 
       return right(_resu);
     } on DioError catch (e) {
-      Logger().e(e.response);
+      print("erro: ${e.response}");
+      Logger().e(e.response.statusCode);
       if (e.response.statusCode > 400 && e.response.statusCode <= 500) {
         return left(BasicFailure("Invalid Auth"));
       } else if (e.error is SocketException) {

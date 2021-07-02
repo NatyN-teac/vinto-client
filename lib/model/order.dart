@@ -197,7 +197,7 @@ class Location {
 class Product {
   String name;
   String description;
-  double price;
+  num price;
   int rating;
   String image;
 
@@ -222,6 +222,7 @@ class Product {
       this.createdBy});
 
   Product.fromJson(Map<String, dynamic> json) {
+
     name = json['name'];
     description = json['description'];
     price = json['price'];

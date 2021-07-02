@@ -27,7 +27,6 @@ class PopularBloc {
     getRecommended(reload: true);
     getOrders(reload: true);
   }
-
   Future getRecommended({bool reload = false}) async {
     if (reload) {
       _setRecommended(recommended.copyWith(status: LoadingState.loading));

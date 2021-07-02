@@ -23,7 +23,7 @@ class AuthController extends GetxController {
   login(BuildContext context, String email, String password) async {
     _overlayLoader.show(context);
     try {
-      prefs = await SharedPreferences.getInstance();
+      // prefs = await SharedPreferences.getInstance();
 
       var data = {"email": "$email", "password": "$password"};
       var result =
