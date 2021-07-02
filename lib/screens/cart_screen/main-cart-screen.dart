@@ -80,14 +80,14 @@ class _MainCartScreenState extends State<MainCartScreen> {
           duration: Duration(seconds: 3),
           backgroundColor: Get.theme.snackBarTheme.backgroundColor,
           colorText: Get.theme.snackBarTheme.actionTextColor);
-    }, (r) {
+    }, (r) async {
       Get.snackbar('Payment Success'.tr, "Successfully paid for orders",
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
           backgroundColor: Get.theme.snackBarTheme.backgroundColor,
           colorText: Get.theme.snackBarTheme.actionTextColor);
-      _cartBloc.getOrders(reload: true);
-      _order.getOrders(reload: true);
+      await _cartBloc.getOrders(reload: true);
+      await _order.getOrders(reload: true);
     });
 
     setState(() {
