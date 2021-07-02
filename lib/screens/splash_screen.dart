@@ -28,12 +28,12 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<AuthState>(
-          // initialData: new AuthState(fresh: null, token: null),
+          initialData: new AuthState(fresh: null, token: null),
           stream: _appstate.authStateStream,
           builder: (context, snapshot) {
             if (_appstate.state.state == AuthStateEnum.loading) {
-              // return _Splash();
-              return SignIn();
+              return _Splash();
+              // return SignIn();
             } else {
               return _appstate.state.auth ? Homescreen() : SignIn();
             }

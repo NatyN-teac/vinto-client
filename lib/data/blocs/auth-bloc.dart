@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vinto/data/blocs/location.dart';
 // import 'package:logger/logger.dart';
 // import 'package:vinto/data/blocs/cart.dart';
@@ -47,26 +46,27 @@ mixin AuthBloc {
   bool isPhone() => true;
 
   Future initAuth() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String notvirgin;
     String token;
     String _data;
 
-    if (isPhone()) {
-      notvirgin = await _storage.read(key: 'fresh');
-      token = await _storage.read(key: 'token_key');
-      _data = await _storage.read(key: 'data');
-    } else {
-      notvirgin = prefs.getString('fresh');
-      token = prefs.getString('token_key');
-      _data = prefs.getString('data');
-    }
+    // if (isPhone()) {
+    notvirgin = await _storage.read(key: 'fresh');
+    token = await _storage.read(key: 'token_key');
+    _data = await _storage.read(key: 'data');
+    // } else {
+    //   notvirgin = prefs.getString('fresh');
+    //   token = prefs.getString('token_key');
+    //   _data = prefs.getString('data');
+    // }
 
     if ((notvirgin) == null) {
-      isPhone()
-          ? await _storage.write(key: 'fresh', value: "rotten")
-          : await prefs.setString('fresh', "rotten");
+      // isPhone()
+      //     ?
+      await _storage.write(key: 'fresh', value: "rotten");
+      // : await prefs.setString('fresh', "rotten");
       await Future.delayed(Duration(seconds: 2));
       _setState(state.copyWith(
         fresh: true,
@@ -97,11 +97,12 @@ mixin AuthBloc {
   Future saveToken(
     String cookie,
   ) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    isPhone()
-        ? await _storage.write(key: "token_key", value: cookie)
-        : await prefs.setString('token_key', cookie);
+    // isPhone()
+    //     ?
+    await _storage.write(key: "token_key", value: cookie);
+    // : await prefs.setString('token_key', cookie);
 
     _setState(state.copyWith(token: cookie));
 
@@ -109,33 +110,33 @@ mixin AuthBloc {
   }
 
   Future saveProfile(Map<String, dynamic> data) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var _data = BasicUser.fromMap(data);
 
-    isPhone()
-        ? await _storage.write(key: "data", value: _data.toJson())
-        : await prefs.setString('data', _data.toJson());
+    // isPhone()
+    //     ?
+    await _storage.write(key: "data", value: _data.toJson());
+
+    // : await prefs.setString('data', _data.toJson());
 
     _setState(state.copyWith(profile: _data));
     _setState(state.copyWith(auth: true));
   }
 
   Future logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (isPhone()) {
-      await _storage.delete(key: 'token_key');
-      await _storage.delete(key: 'data');
-    } else {
-      await prefs.remove("token_key");
-      await prefs.remove("data");
-    }
+    // if (isPhone()) {
+    await _storage.delete(key: 'token_key');
+    await _storage.delete(key: 'data');
+    // } else {
+    //   await prefs.remove("token_key");
+    //   await prefs.remove("data");
+    // }
 
     // resetStates();
-    _setState(state.copyWith(
-      auth: true,
-    ));
+    _setState(state.copyWith(token: null, auth: false, profile: null));
   }
 
   // void resetStates() {
