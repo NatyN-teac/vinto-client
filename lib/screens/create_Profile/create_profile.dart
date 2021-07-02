@@ -32,7 +32,7 @@ class _Create_ProfileState extends State<Create_Profile> {
                   height: Get.height * 0.25,
                 ),
                 LightText(
-                  text: "Have you tried Alcolic products before?",
+                  text: "Have you tried products before?",
                   size: 24.0,
                   align: "left",
                 ),

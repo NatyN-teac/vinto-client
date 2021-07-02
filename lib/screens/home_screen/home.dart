@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:vinto/data/blocs/appstate.dart';
 import 'package:vinto/data/blocs/location.dart';
 import 'package:vinto/data/blocs/product/popular.dart';
@@ -262,9 +263,9 @@ class _PopularWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<ProductState>(
-      stream: _homeBloc.recommendedStream,
+      stream: _homeBloc.popularStream,
       builder: (BuildContext context, snapshot) {
-        if (_homeBloc.recommended.status == LoadingState.loading) {
+        if (_homeBloc.popular.status == LoadingState.loading) {
           return Container(
             child: Center(
               child: CircularProgressIndicator(
@@ -273,7 +274,7 @@ class _PopularWidget extends StatelessWidget {
             ),
           );
         } else {
-          return _homeBloc.recommended.data.fold(
+          return _homeBloc.popular.data.fold(
               (l) => Center(
                     child: Column(
                         mainAxisSize: MainAxisSize.min,

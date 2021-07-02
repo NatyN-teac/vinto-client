@@ -15,7 +15,7 @@ final _nearby = getIt.get<NearbyBloc>();
 class Shopnearscreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    _nearby.getOrders();
+    _nearby.getOrders(reload: true);
     SizeConfig().init(context);
 
     var vert_block = SizeConfig.safeBlockVertical;
@@ -25,7 +25,7 @@ class Shopnearscreen extends StatelessWidget {
         backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
-          'Shops Near Me',
+          'Deals Near Me',
           style: TextStyle(
               fontSize: vert_block * 2.2,
               fontFamily: 'Gill medium',

@@ -51,17 +51,6 @@ class _PopularscreenState extends State<Popularscreen> {
               fontWeight: FontWeight.w700),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => Dispancryfacing()));
-        },
-        backgroundColor: Colors.white,
-        child: Icon(
-          Icons.filter_alt,
-          color: Mycolors.green,
-        ),
-      ),
       body: Container(
           width: width,
           height: height,

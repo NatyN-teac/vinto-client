@@ -24,7 +24,8 @@ class PopularBloc {
   }
 
   Future init() async {
-    await Future.wait([getRecommended(), getOrders()]);
+    getRecommended(reload: true);
+    getOrders(reload: true);
   }
 
   Future getRecommended({bool reload = false}) async {

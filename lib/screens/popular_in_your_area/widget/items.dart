@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vinto/helper/colors.dart';
 import 'package:vinto/helper/screensize.dart';
 import 'package:vinto/model/product.dart';
+import 'package:vinto/services/api_url.dart';
 
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
@@ -39,8 +40,8 @@ class Popularitems extends StatelessWidget {
             ),
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  'assets/food.png',
+                child: Image.network(
+                  '${ApiEndPoints.IMAGE_URL}/${product.image}',
                   fit: BoxFit.cover,
                 )),
           ),

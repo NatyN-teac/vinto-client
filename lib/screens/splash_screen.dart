@@ -31,8 +31,6 @@ class _SplashScreenState extends State<SplashScreen> {
           // initialData: new AuthState(fresh: null, token: null),
           stream: _appstate.authStateStream,
           builder: (context, snapshot) {
-            Logger().d("rebuilt");
-
             if (_appstate.state.state == AuthStateEnum.loading) {
               return _Splash();
             } else {

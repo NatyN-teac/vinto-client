@@ -30,7 +30,6 @@ class ProductService {
           "${ApiEndPoints.BASE_URL}products/search",
           data: myPostdata,
           options: Options(headers: DataCommons.authHeader()));
-
       var result =
           (response.data as List).map((e) => Product.fromJson(e)).toList();
 
@@ -77,9 +76,9 @@ class ProductService {
       var response = await dioclient.get(
           "${ApiEndPoints.BASE_URL}products/products_around_me",
           options: Options(headers: DataCommons.authHeader()));
-
       var result =
           (response.data as List).map((e) => Product.fromJson(e)).toList();
+      Logger().d(result.length);
 
       return right(result);
     } on DioError catch (e) {
