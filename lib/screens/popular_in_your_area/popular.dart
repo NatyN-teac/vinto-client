@@ -5,7 +5,6 @@ import 'package:vinto/data/blocs/product/recommended.dart';
 import 'package:vinto/helper/colors.dart';
 import 'package:vinto/helper/screensize.dart';
 import 'package:vinto/model/product.dart';
-import 'package:vinto/screens/Dispancry_front_facing/dispancry.dart';
 import 'package:vinto/screens/popular_in_your_area/widget/items.dart';
 import 'package:vinto/utils/data/injection/get_it_config.dart';
 

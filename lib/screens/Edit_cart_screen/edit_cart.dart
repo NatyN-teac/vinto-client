@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vinto/helper/colors.dart';
 import 'package:vinto/helper/screensize.dart';
 
 // ignore_for_file: camel_case_types
@@ -17,8 +16,6 @@ class _EditcartState extends State<Editcart> {
     SizeConfig().init(context);
     var height = SizeConfig.screenHeight;
     var width = SizeConfig.screenWidth;
-    var vert_block = SizeConfig.safeBlockVertical;
-    var horz_block = SizeConfig.safeBlockHorizontal;
     return Scaffold(
       body: Container(
         width: width,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:vinto/data/blocs/appstate.dart';
 import 'package:vinto/data/blocs/location.dart';
 import 'package:vinto/data/blocs/product/popular.dart';

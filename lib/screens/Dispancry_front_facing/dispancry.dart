@@ -17,8 +17,6 @@ class _DispancryfacingState extends State<Dispancryfacing> {
     SizeConfig().init(context);
     var height = SizeConfig.screenHeight;
     var width = SizeConfig.screenWidth;
-    var vert_block = SizeConfig.safeBlockVertical;
-    var horz_block = SizeConfig.safeBlockHorizontal;
     return DefaultTabController(
       length: 4,
       child: Scaffold(

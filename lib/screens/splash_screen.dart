@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 import 'package:vinto/data/blocs/appstate.dart';
 import 'package:vinto/data/blocs/auth-bloc.dart';
 import 'package:vinto/screens/home_screen/home.dart';
