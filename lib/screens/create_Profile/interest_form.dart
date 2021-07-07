@@ -5,6 +5,7 @@ import 'package:vinto/model/interests.dart';
 import 'package:vinto/screens/create_Profile/experience_form.dart';
 import 'package:vinto/services/api_url.dart';
 import 'package:vinto/services/profile/service.dart';
+import 'package:vinto/utils/ui/essentials.dart';
 import 'package:vinto/widgets/location_Pin.dart';
 import 'package:vinto/widgets/yellow_NextButton.dart';
 
@@ -127,10 +128,11 @@ class _InterestFormState extends State<InterestForm> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Image.network(
-                                "${ApiEndPoints.IMAGE_URL}/${r[index].picture}",
-                                height: 30,
-                              ),
+                              networkImageLoader(
+                                  url:
+                                      "${ApiEndPoints.IMAGE_URL}/${r[index].picture}",
+                                  height: 40,
+                                  width: 40),
                               Text(
                                 r[index].name.toString(),
                                 style:

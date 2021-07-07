@@ -31,38 +31,9 @@ class _CartscreenState extends State<Cartscreen> {
   String email;
   String username;
   final _qtyKey = GlobalKey<FormState>();
-  TextEditingController quantityController;
-
+  int _qty = 1;
   bool _loading = false;
   bool _added = false;
-
-  Future addToCart() async {
-    setState(() {
-      _loading = true;
-    });
-    final _result = await _cartService.addToCart({
-      "product": widget.product.sId,
-      "quantity": int.parse(quantityController.text)
-    });
-
-    _result.fold((l) {
-      Get.snackbar('Cart Error'.tr, l.message,
-          snackPosition: SnackPosition.BOTTOM,
-          duration: Duration(seconds: 3),
-          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
-          colorText: Get.theme.snackBarTheme.actionTextColor);
-    }, (r) {
-      _cartBloc.getOrders(reload: true);
-
-      setState(() {
-        _added = true;
-      });
-    });
-
-    setState(() {
-      _loading = false;
-    });
-  }
 
   getUser() async {
     setState(() {
@@ -74,7 +45,6 @@ class _CartscreenState extends State<Cartscreen> {
   @override
   void initState() {
     getUser();
-    quantityController = new TextEditingController(text: "1");
     super.initState();
   }
 
@@ -83,17 +53,15 @@ class _CartscreenState extends State<Cartscreen> {
       _loading = true;
     });
 
-    final _result = await _cartService.addToCart({
-      "product": widget.product.sId,
-      "quantity": int.parse(quantityController.text)
-    });
+    final _result = await _cartService
+        .addToCart({"product": widget.product.sId, "quantity": _qty});
 
     _result.fold((l) {
       Get.snackbar('Cart Error', l.message,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
-          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
-          colorText: Get.theme.snackBarTheme.actionTextColor);
+          backgroundColor: Mycolors.green,
+          colorText: Colors.white);
     }, (r) {
       setState(() {
         _added = true;
@@ -101,8 +69,8 @@ class _CartscreenState extends State<Cartscreen> {
       Get.snackbar('Success', "Item added to cart",
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
-          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
-          colorText: Get.theme.snackBarTheme.actionTextColor);
+          backgroundColor: Mycolors.green,
+          colorText: Colors.white);
     });
     setState(() {
       _loading = false;
@@ -137,259 +105,263 @@ class _CartscreenState extends State<Cartscreen> {
               fontWeight: FontWeight.w700),
         ),
       ),
-      body: widget.product == null
-          ? Center(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Container(
+              width: width,
+              height: height,
+              color: Colors.white,
               child: Column(
                 children: [
-                  SizedBox(
-                    height: Get.height * 0.15,
-                  ),
-                  CircularProgressIndicator(),
-                  SizedBox(
-                    height: Get.height * 0.05,
-                  ),
                   Container(
-                    child: Text("No product found in Cart."),
-                  )
-                ],
-              ),
-            )
-          : SingleChildScrollView(
-              child: Container(
-                width: width,
-                height: height,
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    Container(
-                      width: width,
-                      height: height / 2,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                  '${ApiEndPoints.IMAGE_URL}/${widget.product.image}'),
-                              fit: BoxFit.cover,
-                              colorFilter: ColorFilter.mode(
-                                  Colors.black45.withOpacity(0.25),
-                                  BlendMode.darken))),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: horz_block * 6,
-                            vertical: horz_block * 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //   children: [
-                            //     InkWell(
-                            //         onTap: () {},
-                            //         child: Icon(
-                            //           Icons.close,
-                            //           color: Colors.white,
-                            //         )),
-                            //     InkWell(
-                            //         onTap: () {
-                            //           Navigator.push(
-                            //               context,
-                            //               MaterialPageRoute(
-                            //                   builder: (context) =>
-                            //                       Editcart()));
-                            //         },
-                            //         child: Icon(
-                            //           Icons.edit,
-                            //           color: Colors.white,
-                            //         ))
-                            //   ],
-                            // ),
-
-                            Expanded(child: SizedBox()),
-                            Text(
-                              '$email',
-                              style: TextStyle(
-                                fontSize: vert_block * 2,
-                                color: Colors.white,
-                                //  fontWeight: FontWeight.w700
-                              ),
-                            ),
-                            SizedBox(
-                              height: vert_block,
-                            ),
-                            Text(
-                              'My Cart',
-                              style: TextStyle(
-                                fontSize: vert_block * 2.5,
-                                color: Colors.white,
-                                //  fontWeight: FontWeight.w700
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: width,
-                      padding: EdgeInsets.symmetric(horizontal: horz_block * 4),
+                    width: width,
+                    height: height / 2,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                '${ApiEndPoints.IMAGE_URL}/${widget.product.image}'),
+                            fit: BoxFit.cover,
+                            colorFilter: ColorFilter.mode(
+                                Colors.black45.withOpacity(0.25),
+                                BlendMode.darken))),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: horz_block * 6,
+                          vertical: horz_block * 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            height: vert_block * 2,
-                          ),
-                          // Text(
-                          //   '$username',
-                          //   style: TextStyle(
-                          //     fontSize: vert_block * 2.2,
-                          //     color: Mycolors.blacktext3,
-                          //     // fontWeight: FontWeight.w700
-                          //   ),
-                          // ),
-                          // Text(
-                          //   'Visa Debit ********6051',
-                          //   style: TextStyle(
-                          //     fontSize: vert_block * 2.1,
-                          //     color: Mycolors.graytext,
-                          //     // fontWeight: FontWeight.w700
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   height: vert_block * 4,
-                          // ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Product/s',
-                                style: TextStyle(
-                                    fontSize: vert_block * 2,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              Text(
-                                'QTY',
-                                style: TextStyle(
-                                    fontSize: vert_block * 2,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ],
+                          Expanded(child: SizedBox()),
+                          Text(
+                            '$email',
+                            style: TextStyle(
+                              fontSize: vert_block * 2,
+                              color: Colors.white,
+                              //  fontWeight: FontWeight.w700
+                            ),
                           ),
                           SizedBox(
                             height: vert_block,
                           ),
-                          Container(
-                            width: width,
-                            height: 2,
-                            color: Mycolors.background,
-                          ),
-                          SizedBox(
-                            height: vert_block * 2,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                ' ${widget.product.name}',
-                                style: TextStyle(
-                                  fontSize: vert_block * 1.7,
-                                  color: Colors.black,
-                                  //fontWeight: FontWeight.w700
-                                ),
-                              ),
-                              Form(
-                                key: _qtyKey,
-                                child: Container(
-                                  width: 40,
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    controller: quantityController,
-                                    validator: (x) {
-                                      if (int.parse(x) < 1) {
-                                        return "err";
-                                      } else if (x.isEmpty) {
-                                        return "err";
-                                      }
-
-                                      return null;
-                                    },
-                                    style: TextStyle(
-                                        color: Colors.black45,
-                                        fontWeight: FontWeight.bold),
-                                    decoration: InputDecoration(
-                                      hintStyle: TextStyle(
-                                        fontSize: 17,
-                                        color: Colors.black45,
-                                        height: 1.3,
-                                      ),
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.grey.withOpacity(0.5),
-                                        ),
-                                      ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.grey.withOpacity(0.5),
-                                        ),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.grey.withOpacity(0.5),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                          Text(
+                            'My Cart',
+                            style: TextStyle(
+                              fontSize: vert_block * 2.5,
+                              color: Colors.white,
+                              //  fontWeight: FontWeight.w700
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text(widget.product.description ?? ""),
-                      ),
-                    ),
-                    Expanded(child: SizedBox()),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: _added
-                          ? Container()
-                          : InkWell(
-                              onTap: _loading
-                                  ? () {}
-                                  : () {
-                                      if (_qtyKey.currentState.validate()) {
-                                        checkOutProduct();
-                                      }
-                                    },
-                              child: Container(
-                                width: width,
-                                height: vert_block * 6,
+                  ),
+                  Container(
+                    width: width,
+                    padding: EdgeInsets.symmetric(horizontal: horz_block * 4),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: vert_block * 2,
+                        ),
+                        // Text(
+                        //   '$username',
+                        //   style: TextStyle(
+                        //     fontSize: vert_block * 2.2,
+                        //     color: Mycolors.blacktext3,
+                        //     // fontWeight: FontWeight.w700
+                        //   ),
+                        // ),
+                        // Text(
+                        //   'Visa Debit ********6051',
+                        //   style: TextStyle(
+                        //     fontSize: vert_block * 2.1,
+                        //     color: Mycolors.graytext,
+                        //     // fontWeight: FontWeight.w700
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //   height: vert_block * 4,
+                        // ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Product/s',
+                              style: TextStyle(
+                                  fontSize: vert_block * 2,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            Text(
+                              'QTY',
+                              style: TextStyle(
+                                  fontSize: vert_block * 2,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: vert_block,
+                        ),
+                        Container(
+                          width: width,
+                          height: 2,
+                          color: Mycolors.background,
+                        ),
+                        SizedBox(
+                          height: vert_block * 2,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              ' ${widget.product.name}',
+                              style: TextStyle(
+                                fontSize: vert_block * 1.7,
+                                color: Colors.black,
+                                //fontWeight: FontWeight.w700
+                              ),
+                            ),
+
+                            Spacer(),
+
+                            IconButton(
                                 color: Mycolors.green,
-                                child: Center(
-                                  child: _loading
-                                      ? Loader(
-                                          color: Colors.white,
-                                        )
-                                      : Text(
-                                          'ADD TO CART',
-                                          style: TextStyle(
-                                            fontSize: vert_block * 2,
-                                            color: Colors.white,
-                                            //  fontWeight: FontWeight.w700
-                                          ),
-                                        ),
+                                onPressed: _qty == 1
+                                    ? null
+                                    : () {
+                                        setState(() {
+                                          _qty--;
+                                        });
+                                      },
+                                icon: Icon(Icons.minimize)),
+
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: Colors.grey)),
+                              child: Center(
+                                child: Text(
+                                  '$_qty',
+                                  style: TextStyle(
+                                    fontSize: vert_block * 1.7,
+                                    color: Colors.black,
+                                    //fontWeight: FontWeight.w700
+                                  ),
                                 ),
                               ),
                             ),
-                    )
-                  ],
-                ),
+
+                            IconButton(
+                                color: Mycolors.green,
+                                onPressed: () {
+                                  setState(() {
+                                    _qty++;
+                                  });
+                                },
+                                icon: Icon(Icons.add))
+
+                            // Form(
+                            //   key: _qtyKey,
+                            //   child: Container(
+                            //     width: 40,
+                            //     child: TextFormField(
+                            //       keyboardType: TextInputType.number,
+                            //       controller: quantityController,
+                            //       validator: (x) {
+                            //         if (int.parse(x) < 1) {
+                            //           return "err";
+                            //         } else if (x.isEmpty) {
+                            //           return "err";
+                            //         }
+
+                            //         return null;
+                            //       },
+                            //       style: TextStyle(
+                            //           color: Colors.black45,
+                            //           fontWeight: FontWeight.bold),
+                            //       decoration: InputDecoration(
+                            //         hintStyle: TextStyle(
+                            //           fontSize: 17,
+                            //           color: Colors.black45,
+                            //           height: 1.3,
+                            //         ),
+                            //         border: UnderlineInputBorder(
+                            //           borderSide: BorderSide(
+                            //             color: Colors.grey.withOpacity(0.5),
+                            //           ),
+                            //         ),
+                            //         enabledBorder: UnderlineInputBorder(
+                            //           borderSide: BorderSide(
+                            //             color: Colors.grey.withOpacity(0.5),
+                            //           ),
+                            //         ),
+                            //         focusedBorder: UnderlineInputBorder(
+                            //           borderSide: BorderSide(
+                            //             color: Colors.grey.withOpacity(0.5),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(widget.product.description ?? ""),
+                    ),
+                  ),
+                ],
               ),
             ),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            // alignment: Alignment.bottomCenter,
+            child: _added
+                ? Container()
+                : InkWell(
+                    onTap: _loading
+                        ? () {}
+                        : () {
+                            checkOutProduct();
+                          },
+                    child: Container(
+                      width: width,
+                      height: vert_block * 6,
+                      color: Mycolors.green,
+                      child: Center(
+                        child: _loading
+                            ? Loader(
+                                color: Colors.white,
+                              )
+                            : Text(
+                                'ADD TO CART',
+                                style: TextStyle(
+                                  fontSize: vert_block * 2,
+                                  color: Colors.white,
+                                  //  fontWeight: FontWeight.w700
+                                ),
+                              ),
+                      ),
+                    ),
+                  ),
+          )
+        ],
+      ),
     );
   }
 }

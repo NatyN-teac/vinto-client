@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vinto/helper/colors.dart';
 import 'package:vinto/model/mood.dart';
 import 'package:vinto/services/api_url.dart';
 
@@ -32,7 +34,6 @@ class MoodController extends GetxController {
             (response.data as List).map((e) => Mood.fromJson(e)).toList();
         moodList.assignAll(result);
         print("res: $result");
-
       }
       isLoading(false);
     } on DioError {
@@ -40,8 +41,8 @@ class MoodController extends GetxController {
       Get.snackbar('Error'.tr, 'Error while fetching Moods!'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
-          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
-          colorText: Get.theme.snackBarTheme.actionTextColor);
+          backgroundColor: Mycolors.green,
+          colorText: Colors.white);
     }
   }
 }

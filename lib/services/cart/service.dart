@@ -76,15 +76,13 @@ class CartServices {
     }
   }
 
-  Future<Either<BasicFailure, bool>> pay(Map<String, dynamic> data) async {
+  Future<Either<BasicFailure, Map<String, dynamic>>> pay() async {
     try {
-      var response = await dioclient.post(
-          "${ApiEndPoints.BASE_URL}orders/payment",
-          data: data,
+      var response = await dioclient.get(
+          "${ApiEndPoints.BASE_URL}orders/intent",
           options: Options(headers: DataCommons.authHeader()));
-      Logger().d(response.data);
 
-      return right(true);
+      return right(response.data);
     } on DioError catch (e) {
       Logger().e(e.response);
       if (e.response.statusCode > 400 && e.response.statusCode <= 500) {

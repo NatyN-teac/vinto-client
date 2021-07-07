@@ -15,6 +15,7 @@ import 'package:vinto/screens/result_screen/Result.dart';
 import 'package:vinto/screens/shop_near_me/shop_near.dart';
 import 'package:vinto/services/api_url.dart';
 import 'package:vinto/utils/data/injection/get_it_config.dart';
+import 'package:vinto/utils/ui/essentials.dart';
 
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
@@ -429,8 +430,8 @@ class _RecommendedWidget extends StatelessWidget {
                     color: Colors.white,
                     child: Column(
                       children: [
-                        Image.network(
-                          '${ApiEndPoints.IMAGE_URL}/${r.first.image}',
+                        networkImageLoader(
+                          url: '${ApiEndPoints.IMAGE_URL}/${r.first.image}',
                           width: vert_block * 30,
                           height: vert_block * 30,
                         ),

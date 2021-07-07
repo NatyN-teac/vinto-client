@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:vinto/data/blocs/cart.dart';
 import 'package:vinto/data/blocs/order-bloc.dart';
 import 'package:vinto/data/blocs/product/recommended.dart';
 import 'package:vinto/helper/colors.dart';
-import 'package:vinto/helper/screensize.dart';
 import 'package:vinto/model/product.dart';
 import 'package:vinto/services/api_url.dart';
 import 'package:vinto/services/cart/service.dart';
 import 'package:vinto/utils/data/injection/get_it_config.dart';
+import 'package:vinto/utils/ui/essentials.dart';
 import 'package:vinto/widgets/loader.dart';
 
 // ignore_for_file: camel_case_types
@@ -17,7 +19,7 @@ import 'package:vinto/widgets/loader.dart';
 // ignore_for_file: deprecated_member_use
 
 final _cartBloc = getIt.get<CartBloc>();
-final _order = getIt.get<OrderBloc>();
+// final _order = getIt.get<OrderBloc>();
 final _cartService = new CartServices();
 
 class MainCartScreen extends StatefulWidget {
@@ -31,6 +33,36 @@ class MainCartScreen extends StatefulWidget {
 class _MainCartScreenState extends State<MainCartScreen> {
   bool _loading = false;
   bool _paying = false;
+  Map<String, dynamic> intentData = {};
+
+  Future prepareSheet() async {
+    await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+            paymentIntentClientSecret: intentData['client_secret'],
+            applePay: true,
+            googlePay: true,
+            style: ThemeMode.system,
+            merchantCountryCode: "US",
+            merchantDisplayName: "Near To Me Delivery"));
+    await displayPaymentSheet();
+  }
+
+  Future displayPaymentSheet() async {
+    try {
+      await Stripe.instance.presentPaymentSheet(
+          parameters: PresentPaymentSheetParameters(
+              clientSecret: intentData['client_secret'], confirmPayment: true));
+
+      Get.snackbar('Payment Success'.tr, "Successfully paid for orders",
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 3),
+          backgroundColor: Mycolors.green,
+          colorText: Colors.white);
+      await clearCart();
+    } catch (e) {
+      Logger().d(e);
+    }
+  }
 
   Future clearCart() async {
     setState(() {
@@ -42,14 +74,14 @@ class _MainCartScreenState extends State<MainCartScreen> {
       Get.snackbar('Cart Error'.tr, l.message,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
-          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
-          colorText: Get.theme.snackBarTheme.actionTextColor);
+          backgroundColor: Mycolors.green,
+          colorText: Colors.white);
     }, (r) {
       Get.snackbar('Cart Cleared'.tr, "Cart Successfully cleared",
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
-          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
-          colorText: Get.theme.snackBarTheme.actionTextColor);
+          backgroundColor: Mycolors.green,
+          colorText: Colors.white);
       _cartBloc.getOrders(reload: true);
     });
 
@@ -62,32 +94,23 @@ class _MainCartScreenState extends State<MainCartScreen> {
     setState(() {
       _paying = true;
     });
-    final _result = await _cartService.pay({
-      "key":
-          "pk_test_51J0mHVCLaMRkYtM5S3H0HwtuzeNWJfdPltE0rJ7mq7j4MazYxsgtkS84Q6VS2yKlcaXwBGx8580cQff0579xTZwp00NLmFXPwc",
-      "amount": 250.99,
-      "description": "New Payment 1",
-      "email": "masresha@example.com",
-      "card": "4000056655665556",
-      "month": 6,
-      "year": 2022,
-      "cvc": 456
-    });
+    final _result = await _cartService.pay();
 
     _result.fold((l) {
       Get.snackbar('Payment Error'.tr, l.message,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
-          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
-          colorText: Get.theme.snackBarTheme.actionTextColor);
+          backgroundColor: Mycolors.green,
+          colorText: Colors.white);
+      setState(() {
+        _paying = false;
+      });
     }, (r) async {
-      Get.snackbar('Payment Success'.tr, "Successfully paid for orders",
-          snackPosition: SnackPosition.BOTTOM,
-          duration: Duration(seconds: 3),
-          backgroundColor: Get.theme.snackBarTheme.backgroundColor,
-          colorText: Get.theme.snackBarTheme.actionTextColor);
-      await _cartBloc.getOrders(reload: true);
-      await _order.getOrders(reload: true);
+      setState(() {
+        intentData = r;
+      });
+
+      await prepareSheet();
     });
 
     setState(() {
@@ -102,8 +125,6 @@ class _MainCartScreenState extends State<MainCartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var vert_block = SizeConfig.safeBlockVertical;
-
     _cartBloc.getOrders();
     return Scaffold(
       appBar: AppBar(
@@ -236,16 +257,12 @@ class _MainCartScreenState extends State<MainCartScreen> {
                         itemBuilder: (ctx, index) {
                           var _or = r[index];
                           return ListTile(
-                            leading: Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          ApiEndPoints.IMAGE_URL +
-                                              "/" +
-                                              _or.product.image))),
-                            ),
+                            leading: networkImageLoader(
+                                height: 50,
+                                width: 50,
+                                url: ApiEndPoints.IMAGE_URL +
+                                    "/" +
+                                    _or.product.image),
                             trailing: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [

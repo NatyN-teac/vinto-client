@@ -5,6 +5,7 @@ import 'package:vinto/helper/screensize.dart';
 import 'package:vinto/model/product.dart';
 import 'package:vinto/screens/cart_screen/cart.dart';
 import 'package:vinto/services/api_url.dart';
+import 'package:vinto/utils/ui/essentials.dart';
 
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
@@ -34,20 +35,13 @@ class _FooditemState extends State<Fooditem> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: horz_block * 42,
-              height: vert_block * 20,
-              decoration: BoxDecoration(
-                // color: Colors.red,
+            ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-              ),
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    '${ApiEndPoints.IMAGE_URL}/${widget.product.image}',
-                    fit: BoxFit.cover,
-                  )),
-            ),
+                child: networkImageLoader(
+                  url: '${ApiEndPoints.IMAGE_URL}/${widget.product.image}',
+                  width: horz_block * 42,
+                  height: vert_block * 20,
+                )),
             SizedBox(
               height: vert_block,
             ),

@@ -3,6 +3,7 @@ import 'package:vinto/helper/colors.dart';
 import 'package:vinto/helper/screensize.dart';
 import 'package:vinto/model/product.dart';
 import 'package:vinto/services/api_url.dart';
+import 'package:vinto/utils/ui/essentials.dart';
 
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
@@ -40,9 +41,10 @@ class Popularitems extends StatelessWidget {
             ),
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  '${ApiEndPoints.IMAGE_URL}/${product.image}',
-                  fit: BoxFit.cover,
+                child: networkImageLoader(
+                  url: '${ApiEndPoints.IMAGE_URL}/${product.image}',
+                  width: horz_block * 42,
+                  height: vert_block * 20,
                 )),
           ),
           SizedBox(
