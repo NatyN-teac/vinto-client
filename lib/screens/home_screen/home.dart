@@ -469,11 +469,14 @@ class _RecommendedWidget extends StatelessWidget {
                                     height: vert_block * 0.8,
                                   ),
                                   Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
-                                        width: horz_block * 27,
-                                        height: vert_block * 4,
+                                        // width: horz_block * 27,
+                                        // height: vert_block * 4,
                                         padding: EdgeInsets.symmetric(
+                                            vertical: 10,
                                             horizontal: horz_block * 2),
                                         decoration: BoxDecoration(
                                             borderRadius:
@@ -505,7 +508,6 @@ class _RecommendedWidget extends StatelessWidget {
                                         width: horz_block,
                                       ),
                                       Container(
-                                        width: horz_block * 27,
                                         height: vert_block * 4,
                                         padding: EdgeInsets.symmetric(
                                             horizontal: horz_block * 2),
@@ -539,7 +541,6 @@ class _RecommendedWidget extends StatelessWidget {
                                         width: horz_block,
                                       ),
                                       Container(
-                                        width: horz_block * 27,
                                         height: vert_block * 4,
                                         padding: EdgeInsets.symmetric(
                                             horizontal: horz_block * 2),

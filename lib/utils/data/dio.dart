@@ -1,3 +1,4 @@
 import 'package:dio/dio.dart';
 
-var dioclient = new Dio(BaseOptions(baseUrl: "http://159.65.82.54:8084/api/"));
+var dioclient =
+    new Dio(BaseOptions(baseUrl: "http://neartomedelivery.com:8084/api/"));

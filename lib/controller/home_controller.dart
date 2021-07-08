@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vinto/helper/colors.dart';
 import 'package:vinto/model/product.dart';
 import 'package:vinto/services/api_url.dart';
 import 'package:vinto/utils/data/commons.dart';
@@ -71,7 +70,7 @@ class HomeController extends GetxController {
       Get.snackbar('Error'.tr, 'Error while fetching Intests!'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
-          backgroundColor: Mycolors.green,
+          backgroundColor: Colors.red,
           colorText: Colors.white);
     }
   }
@@ -107,7 +106,7 @@ class HomeController extends GetxController {
       Get.snackbar('Error'.tr, 'Error while fetching popular products!'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
-          backgroundColor: Mycolors.green,
+          backgroundColor: Colors.red,
           colorText: Colors.white);
     }
   }
@@ -144,7 +143,7 @@ class HomeController extends GetxController {
       Get.snackbar('Error'.tr, 'Error while fetching popular products!'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
-          backgroundColor: Mycolors.green,
+          backgroundColor: Colors.red,
           colorText: Colors.white);
     }
   }

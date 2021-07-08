@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vinto/data/blocs/appstate.dart';
-import 'package:vinto/helper/colors.dart';
 import 'package:vinto/helper/loading.dart';
 import 'package:vinto/model/user.dart';
 import 'package:vinto/screens/create_Profile/profile_intro.dart';
@@ -55,7 +54,7 @@ class AuthController extends GetxController {
       Get.snackbar('Auth Error'.tr, 'Sign in Error'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
-          backgroundColor: Mycolors.green,
+          backgroundColor: Colors.red,
           colorText: Colors.white);
       // hideLoadingIndicator();
 
@@ -82,7 +81,7 @@ class AuthController extends GetxController {
       Get.snackbar('Auth Error'.tr, 'Error While Registering user'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
-          backgroundColor: Mycolors.green,
+          backgroundColor: Colors.red,
           colorText: Colors.white);
       // hideLoadingIndicator();
 

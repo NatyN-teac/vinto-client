@@ -74,7 +74,7 @@ class _MainCartScreenState extends State<MainCartScreen> {
       Get.snackbar('Cart Error'.tr, l.message,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
-          backgroundColor: Mycolors.green,
+          backgroundColor: Colors.red,
           colorText: Colors.white);
     }, (r) {
       Get.snackbar('Cart Cleared'.tr, "Cart Successfully cleared",
@@ -100,7 +100,7 @@ class _MainCartScreenState extends State<MainCartScreen> {
       Get.snackbar('Payment Error'.tr, l.message,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
-          backgroundColor: Mycolors.green,
+          backgroundColor: Colors.red,
           colorText: Colors.white);
       setState(() {
         _paying = false;

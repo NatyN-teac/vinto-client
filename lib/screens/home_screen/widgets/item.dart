@@ -33,6 +33,7 @@ class _FooditemState extends State<Fooditem> {
       },
       child: Container(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
@@ -43,7 +44,7 @@ class _FooditemState extends State<Fooditem> {
                   height: vert_block * 20,
                 )),
             SizedBox(
-              height: vert_block,
+              height: 3,
             ),
             Text(
               '${widget.product.name}',

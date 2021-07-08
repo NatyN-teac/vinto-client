@@ -1,6 +1,6 @@
 class ApiEndPoints {
-  static final String BASE_URL = "http://159.65.82.54:8084/api/";
-  static final String IMAGE_URL = "http://159.65.82.54:8084";
+  static final String BASE_URL = "http://neartomedelivery.com:8084/api/";
+  static final String IMAGE_URL = "http://neartomedelivery.com:8084";
 }
 
 // ignore_for_file: camel_case_types
