@@ -45,7 +45,7 @@ class _SignUpState extends State<SignUp> {
               Container(
                 margin: EdgeInsets.only(top: 60, bottom: 20, left: 18),
                 child: Text(
-                  "Sign up for Vinto",
+                  "Sign up for Near To Me",
                   style: TextStyle(
                     color: KWhiteColor,
                     fontSize: 26,
@@ -264,7 +264,7 @@ class _SignUpState extends State<SignUp> {
                     child: LightText(
                       size: 13.0,
                       text:
-                          "By using Vinto, you agree to the Terms, Cookie Policy and Privacy Policy",
+                          "By using Near To Me, you agree to the Terms, Cookie Policy and Privacy Policy",
                       align: "center",
                     ),
                   ),

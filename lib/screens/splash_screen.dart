@@ -59,7 +59,7 @@ class _Splash extends StatelessWidget {
           ),
           child: Center(
             child: Image.asset(
-              "assets/logo/vinto white logo.png",
+              "assets/ntmd.png",
               width: Get.width * 0.6,
             ),
           ),

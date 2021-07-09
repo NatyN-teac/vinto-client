@@ -30,7 +30,7 @@ class _SignInState extends State<SignIn> {
               child: Container(
                 margin: EdgeInsets.only(top: 80, bottom: 50),
                 child: Image.asset(
-                  'assets/logo/vinto white logo.png',
+                  'assets/ntmd.png',
                   height: 45,
                 ),
               ),
