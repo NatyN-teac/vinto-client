@@ -39,6 +39,8 @@ class LocationBloc {
     }
   }
 
+  void reset() =>
+      _location.add(LocationLoadingState(status: LoadingState.loading));
   dispose() => _location.close();
 }
 

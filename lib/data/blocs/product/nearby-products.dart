@@ -28,7 +28,7 @@ class NearbyBloc {
     }
   }
 
-  void resetBloc() {
+  void reset() {
     _setState(new ProductState(status: LoadingState.loading));
   }
 

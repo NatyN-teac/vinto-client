@@ -19,7 +19,7 @@ class SearchBloc {
   Stream<Either<BasicFailure, List<Product>>> _results;
   Stream<Either<BasicFailure, List<Product>>> get results => _results;
 
-  void resetBloc() {
+  void reset() {
     _searchTerms.add("");
   }
 

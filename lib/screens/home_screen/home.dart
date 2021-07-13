@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:vinto/data/blocs/appstate.dart';
 import 'package:vinto/data/blocs/location.dart';
 import 'package:vinto/data/blocs/product/popular.dart';
@@ -14,6 +15,7 @@ import 'package:vinto/screens/popular_in_your_area/popular.dart';
 import 'package:vinto/screens/result_screen/Result.dart';
 import 'package:vinto/screens/shop_near_me/shop_near.dart';
 import 'package:vinto/services/api_url.dart';
+import 'package:vinto/update_password.dart';
 import 'package:vinto/utils/data/injection/get_it_config.dart';
 import 'package:vinto/utils/ui/essentials.dart';
 
@@ -24,7 +26,7 @@ final _homeBloc = getIt.get<PopularBloc>();
 final _appstate = getIt.get<AppState>();
 final _location = getIt.get<LocationBloc>();
 
-enum ProfileMenu { logout }
+enum ProfileMenu { logout, update }
 
 class Homescreen extends StatelessWidget {
   @override
@@ -157,9 +159,16 @@ class _HomeScreen extends StatelessWidget {
                       if (result == ProfileMenu.logout) {
                         await _appstate.logout();
                       }
+                      if (result == ProfileMenu.update) {
+                        Get.to(UpdatePassword());
+                      }
                     },
                     itemBuilder: (BuildContext context) =>
                         <PopupMenuEntry<ProfileMenu>>[
+                      const PopupMenuItem<ProfileMenu>(
+                        value: ProfileMenu.update,
+                        child: Text('update password'),
+                      ),
                       const PopupMenuItem<ProfileMenu>(
                         value: ProfileMenu.logout,
                         child: Text('logout'),

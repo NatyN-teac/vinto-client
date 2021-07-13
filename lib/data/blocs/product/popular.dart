@@ -58,7 +58,8 @@ class PopularBloc {
     }
   }
 
-  void resetBloc() {
+  void reset() {
+    _setRecommended(new ProductState(status: LoadingState.loading));
     _setState(new ProductState(status: LoadingState.loading));
   }
 

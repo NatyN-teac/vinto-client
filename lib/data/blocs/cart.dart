@@ -29,7 +29,7 @@ class CartBloc {
     }
   }
 
-  void resetBloc() {
+  void reset() {
     _setState(new OrderState(status: LoadingState.loading));
   }
 

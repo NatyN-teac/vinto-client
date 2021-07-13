@@ -32,5 +32,13 @@ void initInjector() {
   Get.lazyPut(() => MoodController());
   Get.lazyPut(() => InterestController());
   Get.lazyPut(() => TasteController());
-  // Get.lazyPut(() => HomeController());
+}
+
+void resetSingletons() {
+  getIt.get<NearbyBloc>().reset();
+  getIt.get<PopularBloc>().reset();
+  getIt.get<LocationBloc>().reset();
+  getIt.get<SearchBloc>().reset();
+  getIt.get<CartBloc>().reset();
+  getIt.get<OrderBloc>().reset();
 }

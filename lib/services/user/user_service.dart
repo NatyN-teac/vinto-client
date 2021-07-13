@@ -96,4 +96,24 @@ class UserService {
       return left(new RegisterationError(message: err));
     }
   }
+
+  Future<Either<RegisterationError, bool>> updatePassword(
+      Map<String, dynamic> data) async {
+    try {
+      await dioclient.put("/users/password/update",
+          options: Options(headers: DataCommons.authHeader()), data: data);
+      return right(true);
+    } on DioError catch (e) {
+      String err = e.message;
+
+      if (e.error is SocketException) {
+        err = "Network Error";
+      } else if (e.error is HttpException) {
+        err = "Server Error";
+      } else if (e.error is FormatException) {
+        err = "Bad Request";
+      }
+      return left(new RegisterationError(message: err));
+    }
+  }
 }
