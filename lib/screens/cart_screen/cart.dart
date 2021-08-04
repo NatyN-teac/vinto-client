@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vinto/data/blocs/appstate.dart';
-import 'package:vinto/data/blocs/cart.dart';
 import 'package:vinto/helper/colors.dart';
 import 'package:vinto/helper/screensize.dart';
 import 'package:vinto/model/product.dart';
@@ -16,7 +15,6 @@ import 'package:vinto/widgets/loader.dart';
 final _appstate = getIt.get<AppState>();
 
 final _cartService = new CartServices();
-final _cartBloc = getIt.get<CartBloc>();
 
 class Cartscreen extends StatefulWidget {
   final Product product;
@@ -30,7 +28,6 @@ class _CartscreenState extends State<Cartscreen> {
   // final CheckoutController checkoutController = CheckoutController.to;
   String email;
   String username;
-  final _qtyKey = GlobalKey<FormState>();
   int _qty = 1;
   bool _loading = false;
   bool _added = false;

@@ -36,15 +36,20 @@ class _MainCartScreenState extends State<MainCartScreen> {
   Map<String, dynamic> intentData = {};
 
   Future prepareSheet() async {
-    await Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-            paymentIntentClientSecret: intentData['client_secret'],
-            applePay: true,
-            googlePay: true,
-            style: ThemeMode.system,
-            merchantCountryCode: "US",
-            merchantDisplayName: "Near To Me Delivery"));
-    await displayPaymentSheet();
+    try {
+      await Stripe.instance.initPaymentSheet(
+          paymentSheetParameters: SetupPaymentSheetParameters(
+              paymentIntentClientSecret: intentData['client_secret'],
+              applePay: true,
+              googlePay: true,
+              style: ThemeMode.system,
+              merchantCountryCode: "US",
+              merchantDisplayName: "Near To Me Delivery"));
+      await displayPaymentSheet();
+    } catch (e) {
+      Logger().e(e);
+      rethrow;
+    }
   }
 
   Future displayPaymentSheet() async {
@@ -59,8 +64,23 @@ class _MainCartScreenState extends State<MainCartScreen> {
           backgroundColor: Mycolors.green,
           colorText: Colors.white);
       await clearCart();
-    } catch (e) {
-      Logger().d(e);
+      Logger().d("Reached");
+    } on Exception catch (e) {
+      Logger().e(e);
+      if (e is StripeException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Error from Stripe: ${(e as StripeException).error.localizedMessage}'),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Unknown error: $e'),
+          ),
+        );
+      }
     }
   }
 
