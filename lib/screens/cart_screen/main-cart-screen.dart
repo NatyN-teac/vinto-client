@@ -40,8 +40,6 @@ class _MainCartScreenState extends State<MainCartScreen> {
       await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
               paymentIntentClientSecret: intentData['client_secret'],
-              applePay: true,
-              googlePay: true,
               style: ThemeMode.system,
               merchantCountryCode: "US",
               merchantDisplayName: "Near To Me Delivery"));

@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get_core/get_core.dart';
+import 'package:logger/logger.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:vinto/data/blocs/location.dart';
 import 'package:vinto/model/basic-user.dart';
 import 'package:vinto/utils/data/injection/get_it_config.dart';
-
-FlutterSecureStorage _storage = new FlutterSecureStorage();
 
 final _location = getIt.get<LocationBloc>();
 
@@ -20,7 +22,12 @@ mixin AuthBloc {
   AuthState get state => _state.value;
 
   _setState(AuthState _) {
+    Logger().d(_.toMap());
     _state.add(_);
+  }
+
+  Future<SharedPreferences> _prefs() async {
+    return await SharedPreferences.getInstance();
   }
 
   void shiftAuth(bool val) {
@@ -34,26 +41,16 @@ mixin AuthBloc {
   bool isPhone() => true;
 
   Future initAuth() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    var prefs = await _prefs();
 
-    String notvirgin;
-    String token;
-    String _data;
-
-    // if (isPhone()) {
-    notvirgin = await _storage.read(key: 'fresh');
-    token = await _storage.read(key: 'token_key');
-    _data = await _storage.read(key: 'data');
-    // } else {
-    //   notvirgin = prefs.getString('fresh');
-    //   token = prefs.getString('token_key');
-    //   _data = prefs.getString('data');
-    // }
+    String notvirgin = prefs.getString('fresh');
+    String token = prefs.getString('token_key');
+    String _data = prefs.getString('data');
 
     if ((notvirgin) == null) {
       // isPhone()
       //     ?
-      await _storage.write(key: 'fresh', value: "rotten");
+      await prefs.setString('fresh', "rotten");
       // : await prefs.setString('fresh', "rotten");
       await Future.delayed(Duration(seconds: 2));
       _setState(state.copyWith(
@@ -85,11 +82,13 @@ mixin AuthBloc {
   Future saveToken(
     String cookie,
   ) async {
+    var prefs = await _prefs();
+
     // SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // isPhone()
     //     ?
-    await _storage.write(key: "token_key", value: cookie);
+    await prefs.setString("token_key", cookie);
     // : await prefs.setString('token_key', cookie);
 
     _setState(state.copyWith(token: cookie));
@@ -98,33 +97,24 @@ mixin AuthBloc {
   }
 
   Future saveProfile(Map<String, dynamic> data) async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    var prefs = await _prefs();
 
     var _data = BasicUser.fromMap(data);
 
-    // isPhone()
-    //     ?
-    await _storage.write(key: "data", value: _data.toJson());
-
-    // : await prefs.setString('data', _data.toJson());
+    await prefs.setString("data", _data.toJson());
 
     _setState(state.copyWith(profile: _data));
     _setState(state.copyWith(auth: true));
   }
 
   Future logout() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    var prefs = await _prefs();
 
-    // if (isPhone()) {
-    await _storage.delete(key: 'token_key');
-    await _storage.delete(key: 'data');
-    // } else {
-    //   await prefs.remove("token_key");
-    //   await prefs.remove("data");
-    // }
+    await prefs.remove('token_key');
+    await prefs.remove('data');
 
-    // resetStates();
-    _setState(state.copyWith(token: null, auth: false, profile: null));
+    _setState(AuthState.reset());
+
     resetSingletons();
   }
 
@@ -149,6 +139,15 @@ class AuthState {
     @required this.token,
   });
 
+  factory AuthState.reset() {
+    return AuthState(
+        auth: false,
+        state: AuthStateEnum.loaded,
+        profile: null,
+        fresh: null,
+        token: '');
+  }
+
   AuthState copyWith(
       {bool auth,
       AuthStateEnum state,
@@ -163,4 +162,14 @@ class AuthState {
       profile: profile ?? this.profile,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'auth': auth,
+      'fresh': fresh,
+      'token': token,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 }

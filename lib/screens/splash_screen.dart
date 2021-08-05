@@ -32,7 +32,6 @@ class _SplashScreenState extends State<SplashScreen> {
           builder: (context, snapshot) {
             if (_appstate.state.state == AuthStateEnum.loading) {
               return _Splash();
-              // return SignIn();
             } else {
               return _appstate.state.auth ? Homescreen() : SignIn();
             }
