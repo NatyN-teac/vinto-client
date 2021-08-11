@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-import 'package:get/get_core/get_core.dart';
-import 'package:logger/logger.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,7 +19,6 @@ mixin AuthBloc {
   AuthState get state => _state.value;
 
   _setState(AuthState _) {
-    Logger().d(_.toMap());
     _state.add(_);
   }
 
@@ -84,12 +80,7 @@ mixin AuthBloc {
   ) async {
     var prefs = await _prefs();
 
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    // isPhone()
-    //     ?
     await prefs.setString("token_key", cookie);
-    // : await prefs.setString('token_key', cookie);
 
     _setState(state.copyWith(token: cookie));
 

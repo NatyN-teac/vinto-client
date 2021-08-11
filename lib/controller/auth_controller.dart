@@ -68,7 +68,6 @@ class AuthController extends GetxController {
 
       var result =
           await dio.post("${ApiEndPoints.BASE_URL}users/signup", data: data);
-      print("result : $result");
       if (result.statusCode == 200 || result.statusCode == 201) {
         // User user = User.fromJson(result.data);
         Get.to(SignIn());
@@ -77,7 +76,6 @@ class AuthController extends GetxController {
       _overlayLoader.hide();
     } on DioError catch (e) {
       _overlayLoader.hide();
-      print("error: ${e.response}");
       Get.snackbar('Auth Error'.tr, 'Error While Registering user'.tr,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),

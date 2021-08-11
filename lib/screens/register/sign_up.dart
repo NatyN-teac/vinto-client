@@ -244,9 +244,9 @@ class _SignUpState extends State<SignUp> {
                         text: "Already have an account?",
                       ),
                       TextSpan(
-                        text: "Sign In",
+                        text: "   Sign In",
                         style: TextStyle(
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.bold,
                           color: KWhiteColor.withOpacity(0.6),
                         ),
                       ),

@@ -26,14 +26,20 @@ class _SignInState extends State<SignIn> {
           padding:
               EdgeInsets.symmetric(horizontal: Get.width * 0.1, vertical: 20),
           children: [
-            Center(
-              child: Container(
-                margin: EdgeInsets.only(top: 80, bottom: 50),
-                child: Image.asset(
-                  'assets/ntmd.png',
-                  height: 45,
-                ),
-              ),
+            SizedBox(
+              height: 50,
+            ),
+            Text(
+              "Near To Me\n Delivery",
+              style: TextStyle(
+                  color: KWhiteColor,
+                  fontSize: 35,
+                  // height: 1.5,
+                  fontWeight: FontWeight.w900),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 10,
             ),
             Text(
               "High quality goods,\ndelivered to your doorstep.",
@@ -99,12 +105,12 @@ class _SignInState extends State<SignIn> {
                   ),
                   children: [
                     TextSpan(
-                      text: "Forgot Password?",
+                      text: "Forgot Password?  ",
                     ),
                     TextSpan(
                       text: " Reset it here.",
                       style: TextStyle(
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.bold,
                         color: KWhiteColor.withOpacity(0.6),
                       ),
                     ),
@@ -132,7 +138,7 @@ class _SignInState extends State<SignIn> {
                       text: "Don't have an Account?",
                     ),
                     TextSpan(
-                      text: "Sign up",
+                      text: "   Sign up",
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         color: KWhiteColor.withOpacity(0.6),
@@ -148,7 +154,7 @@ class _SignInState extends State<SignIn> {
             LightText(
               size: 13.0,
               text:
-                  "By using Vinto, you agree to the Terms, Cookie Policy and Privacy Policy",
+                  "By using Near to Me Delivery, you agree to the Terms, Cookie Policy and Privacy Policy",
               align: "center",
             ),
           ],
