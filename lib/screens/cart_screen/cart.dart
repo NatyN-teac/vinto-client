@@ -1,12 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vinto/data/blocs/appstate.dart';
 import 'package:vinto/helper/colors.dart';
 import 'package:vinto/helper/screensize.dart';
 import 'package:vinto/model/product.dart';
+import 'package:vinto/screens/register/sign_In.dart';
 import 'package:vinto/services/api_url.dart';
 import 'package:vinto/services/cart/service.dart';
 import 'package:vinto/utils/data/injection/get_it_config.dart';
+import 'package:vinto/utils/ui/essentials.dart';
 import 'package:vinto/widgets/loader.dart';
 
 // ignore_for_file: camel_case_types
@@ -111,48 +114,69 @@ class _CartscreenState extends State<Cartscreen> {
               color: Colors.white,
               child: Column(
                 children: [
-                  Container(
-                    width: width,
-                    height: height / 2,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                '${ApiEndPoints.IMAGE_URL}/${widget.product.image}'),
-                            fit: BoxFit.cover,
-                            colorFilter: ColorFilter.mode(
-                                Colors.black45.withOpacity(0.25),
-                                BlendMode.darken))),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: horz_block * 6,
-                          vertical: horz_block * 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(child: SizedBox()),
-                          // Text(
-                          //   '$email',
-                          //   style: TextStyle(
-                          //     fontSize: vert_block * 2,
-                          //     color: Colors.white,
-                          //     //  fontWeight: FontWeight.w700
-                          //   ),
-                          // ),
-                          SizedBox(
-                            height: vert_block,
+                  Stack(
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl:
+                            '${ApiEndPoints.IMAGE_URL}/${widget.product.image}',
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: imageProvider,
+                                colorFilter: ColorFilter.mode(
+                                    Colors.black45.withOpacity(0.3),
+                                    BlendMode.darken)),
                           ),
-                          Text(
-                            'My Cart',
-                            style: TextStyle(
-                              fontSize: vert_block * 2.5,
-                              color: Colors.white,
-                              //  fontWeight: FontWeight.w700
-                            ),
-                          ),
-                        ],
+                          width: width - 1,
+                          height: (height / 2) - 1,
+                        ),
+                        placeholder: (context, url) => shimmerLoader(
+                            width: width - 1,
+                            height: (height / 2) - 1,
+                            circle: false),
+                        errorWidget: (context, url, error) => Container(
+                            decoration:
+                                BoxDecoration(shape: BoxShape.rectangle),
+                            height: height - 1,
+                            width: width - 1,
+                            child: Icon(Icons.error)),
                       ),
-                    ),
-                  ),
+                      Positioned(
+                        left: 10,
+                        bottom: 20,
+                        child: Text(
+                          'My Cart',
+                          style: TextStyle(
+                            fontSize: vert_block * 2.5,
+                            color: Colors.white,
+                            //  fontWeight: FontWeight.w700
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+
+                  // Container(
+                  //   width: width,
+                  //   height: height / 2,
+                  //   decoration: BoxDecoration(
+                  //       image: DecorationImage(
+                  //           image: NetworkImage(
+                  //              ),
+                  //           fit: BoxFit.cover,
+
+                  //               )),
+                  //   child: Container(
+                  //     padding: EdgeInsets.symmetric(
+                  //         horizontal: horz_block * 6,
+                  //         vertical: horz_block * 10),
+                  //     child:
+                  //   ),
+                  // ),
+
+                  ,
                   Container(
                     width: width,
                     padding: EdgeInsets.symmetric(horizontal: horz_block * 4),
@@ -334,7 +358,9 @@ class _CartscreenState extends State<Cartscreen> {
                     onTap: _loading
                         ? () {}
                         : () {
-                            checkOutProduct();
+                            getIt.get<AppState>().state.auth
+                                ? checkOutProduct()
+                                : Get.to(SignIn());
                           },
                     child: Container(
                       width: width,
@@ -346,7 +372,9 @@ class _CartscreenState extends State<Cartscreen> {
                                 color: Colors.white,
                               )
                             : Text(
-                                'ADD TO CART',
+                                getIt.get<AppState>().state.auth
+                                    ? 'ADD TO CART'
+                                    : 'SIGN IN TO SHOP',
                                 style: TextStyle(
                                   fontSize: vert_block * 2,
                                   color: Colors.white,
