@@ -34,8 +34,7 @@ class AuthController extends GetxController {
         if (user.user.role == "client") {
           await _appstate.saveToken(result.data['token']);
           await _appstate.saveProfile(result.data['user']);
-
-          Get.to(Profile_Intro());
+          Get.off(Profile_Intro());
         } else {
           Get.snackbar('Invalid Role'.tr,
               'a ${user.user.role} can not use this version !!'.tr,
@@ -76,7 +75,7 @@ class AuthController extends GetxController {
       _overlayLoader.hide();
     } on DioError catch (e) {
       _overlayLoader.hide();
-      Get.snackbar('Auth Error'.tr, 'Error While Registering user'.tr,
+      Get.snackbar('Auth Error'.tr, e.message,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 3),
           backgroundColor: Colors.red,

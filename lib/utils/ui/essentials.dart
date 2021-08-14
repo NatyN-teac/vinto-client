@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'dart:io' show Platform;
 
 import 'package:shimmer/shimmer.dart';
+import 'package:vinto/helper/colors.dart';
 
 // Date Picker typedef
 typedef DatePickerChanged = void Function(DateTime date);
@@ -77,14 +78,14 @@ Widget emptyList(
         Icon(
           icon,
           size: iconSize,
-          color: accentColor.withOpacity(0.5),
+          color: Mycolors.green.withOpacity(0.5),
         ),
         SizedBox(height: 20),
         Text(
           msg,
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: fontSize, color: primaryColor.withOpacity(0.4)),
+              fontSize: fontSize, color: Mycolors.green.withOpacity(0.4)),
         )
       ],
     ),

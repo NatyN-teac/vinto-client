@@ -25,7 +25,7 @@ class PopularBloc {
 
   Future init() async {
     getRecommended();
-    getOrders();
+    getPopular();
   }
 
   Future getRecommended({bool reload = false}) async {
@@ -44,7 +44,7 @@ class PopularBloc {
     }
   }
 
-  Future getOrders({bool reload = false}) async {
+  Future getPopular({bool reload = false}) async {
     if (reload) {
       _setState(popular.copyWith(status: LoadingState.loading));
       final _data = await _productRepo.getPopular();

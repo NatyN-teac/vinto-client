@@ -10,6 +10,7 @@ import 'package:vinto/model/product.dart';
 import 'package:vinto/screens/cart_screen/cart.dart';
 import 'package:vinto/screens/home_screen/widgets/item.dart';
 import 'package:vinto/screens/popular_in_your_area/popular.dart';
+import 'package:vinto/screens/register/sign_In.dart';
 import 'package:vinto/services/api_url.dart';
 import 'package:vinto/update_password.dart';
 import 'package:vinto/utils/data/injection/get_it_config.dart';
@@ -22,10 +23,28 @@ final _homeBloc = getIt.get<PopularBloc>();
 final _appstate = getIt.get<AppState>();
 final _location = getIt.get<LocationBloc>();
 
-enum ProfileMenu { logout, update }
+enum ProfileMenu { logout, update, login }
 
 class RecomendedScreen extends StatelessWidget {
   const RecomendedScreen({Key key}) : super(key: key);
+
+  List<PopupMenuItem<ProfileMenu>> _auth() => [
+        const PopupMenuItem<ProfileMenu>(
+          value: ProfileMenu.update,
+          child: Text('update password'),
+        ),
+        const PopupMenuItem<ProfileMenu>(
+          value: ProfileMenu.logout,
+          child: Text('logout'),
+        ),
+      ];
+
+  List<PopupMenuItem<ProfileMenu>> _public() => [
+        const PopupMenuItem<ProfileMenu>(
+          value: ProfileMenu.login,
+          child: Text('login'),
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +134,9 @@ class RecomendedScreen extends StatelessWidget {
                     child: CircleAvatar(
                       backgroundColor: Colors.grey.withOpacity(0.3),
                       radius: 20,
-                      child: Icon(Icons.person),
+                      child: Icon(_appstate.state.auth
+                          ? Icons.person
+                          : Icons.more_vert),
                     ),
                     onSelected: (ProfileMenu result) async {
                       if (result == ProfileMenu.logout) {
@@ -124,18 +145,12 @@ class RecomendedScreen extends StatelessWidget {
                       if (result == ProfileMenu.update) {
                         Get.to(UpdatePassword());
                       }
+                      if (result == ProfileMenu.login) {
+                        Get.to(SignIn());
+                      }
                     },
                     itemBuilder: (BuildContext context) =>
-                        <PopupMenuEntry<ProfileMenu>>[
-                      const PopupMenuItem<ProfileMenu>(
-                        value: ProfileMenu.update,
-                        child: Text('update password'),
-                      ),
-                      const PopupMenuItem<ProfileMenu>(
-                        value: ProfileMenu.logout,
-                        child: Text('logout'),
-                      ),
-                    ],
+                        _appstate.state.auth ? _auth() : _public(),
                   ),
                 ],
               ),
@@ -233,6 +248,7 @@ class _PopularWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _homeBloc.getPopular();
     return StreamBuilder<ProductState>(
       stream: _homeBloc.popularStream,
       builder: (BuildContext context, snapshot) {
@@ -263,7 +279,7 @@ class _PopularWidget extends StatelessWidget {
                           SizedBox(height: 20),
                           TextButton.icon(
                               onPressed: () {
-                                _homeBloc.getOrders(reload: true);
+                                _homeBloc.getPopular(reload: true);
                               },
                               icon: Icon(
                                 Icons.refresh,
@@ -288,7 +304,7 @@ class _PopularWidget extends StatelessWidget {
                           SizedBox(height: 10),
                           TextButton.icon(
                               onPressed: () {
-                                _homeBloc.getOrders(reload: true);
+                                _homeBloc.getPopular(reload: true);
                               },
                               icon: Icon(
                                 Icons.refresh,

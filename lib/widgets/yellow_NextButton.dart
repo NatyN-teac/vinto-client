@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 Widget yellowButton(var txt, var wid, var pageName) {
   return TextButton(
-    onPressed: () => Get.to(pageName),
+    onPressed: () => Get.off(pageName),
     style: ButtonStyle(
         padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 12)),
         backgroundColor: MaterialStateProperty.all(KYellowColor)),

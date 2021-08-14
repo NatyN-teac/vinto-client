@@ -14,7 +14,7 @@ class SearchBloc {
   }
 
   final _searchTerms = BehaviorSubject<String>();
-  void searchUser(String query) => _searchTerms.add(query);
+  void searchProduct(String query) => _searchTerms.add(query);
 
   Stream<Either<BasicFailure, List<Product>>> _results;
   Stream<Either<BasicFailure, List<Product>>> get results => _results;

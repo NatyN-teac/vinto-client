@@ -34,8 +34,8 @@ class _CartscreenState extends State<Cartscreen> {
 
   getUser() async {
     setState(() {
-      email = _appstate.state.profile.email;
-      username = _appstate.state.profile.client.username;
+      // email = _appstate.state.profile.email;
+      // username = _appstate.state.profile.client.username;
     });
   }
 
@@ -130,14 +130,14 @@ class _CartscreenState extends State<Cartscreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(child: SizedBox()),
-                          Text(
-                            '$email',
-                            style: TextStyle(
-                              fontSize: vert_block * 2,
-                              color: Colors.white,
-                              //  fontWeight: FontWeight.w700
-                            ),
-                          ),
+                          // Text(
+                          //   '$email',
+                          //   style: TextStyle(
+                          //     fontSize: vert_block * 2,
+                          //     color: Colors.white,
+                          //     //  fontWeight: FontWeight.w700
+                          //   ),
+                          // ),
                           SizedBox(
                             height: vert_block,
                           ),

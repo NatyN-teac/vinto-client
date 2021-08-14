@@ -24,7 +24,7 @@ class _PopularscreenState extends State<Popularscreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    _homeBloc.getOrders();
+    _homeBloc.getPopular();
     var height = SizeConfig.screenHeight;
     var width = SizeConfig.screenWidth;
     var vert_block = SizeConfig.safeBlockVertical;
@@ -84,7 +84,7 @@ class _PopularscreenState extends State<Popularscreen> {
                                 SizedBox(height: 20),
                                 TextButton.icon(
                                     onPressed: () {
-                                      _homeBloc.getOrders(reload: true);
+                                      _homeBloc.getPopular(reload: true);
                                     },
                                     icon: Icon(
                                       Icons.refresh,
@@ -109,7 +109,7 @@ class _PopularscreenState extends State<Popularscreen> {
                                 SizedBox(height: 10),
                                 TextButton.icon(
                                     onPressed: () {
-                                      _homeBloc.getOrders(reload: true);
+                                      _homeBloc.getPopular(reload: true);
                                     },
                                     icon: Icon(
                                       Icons.refresh,

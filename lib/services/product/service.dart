@@ -30,11 +30,14 @@ class ProductService {
 
       var response = await dioclient.post(
         "${ApiEndPoints.BASE_URL}products/search",
-        data: myPostdata,
+        data: [],
         // options: Options(headers: DataCommons.authHeader())
       );
       var result =
           (response.data as List).map((e) => Product.fromJson(e)).toList();
+      result.shuffle();
+
+      // Logger().d(result.length);
 
       return right(result);
     } on DioError catch (e) {
@@ -109,13 +112,15 @@ class ProductService {
       String query) async {
     try {
       var response = await dioclient.post(
-          "${ApiEndPoints.BASE_URL}products/search_by_name",
-          data: {"name": query},
-          options: Options(headers: DataCommons.authHeader()));
+        "${ApiEndPoints.BASE_URL}products/search_by_name",
+        data: {"name": query},
+        // options: Options(headers: DataCommons.authHeader()
+
+        // )
+      );
 
       var result =
           (response.data as List).map((e) => Product.fromJson(e)).toList();
-
       return right(result);
     } on DioError catch (e) {
       Logger().e(e.response);

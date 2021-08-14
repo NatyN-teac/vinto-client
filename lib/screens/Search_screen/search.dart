@@ -31,7 +31,7 @@ class _SearchscreenState extends State<Searchscreen> {
 
   void _querylistener() {
     if (_query.text.isNotEmpty) {
-      _searchBloc.searchUser(_query.text);
+      _searchBloc.searchProduct(_query.text);
 
       setState(() {
         isEmpty = false;

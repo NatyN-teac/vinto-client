@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vinto/helper/constant.dart';
 import 'package:flutter/material.dart';
@@ -232,10 +233,9 @@ class _TasteFormState extends State<TasteForm> {
                         pref.setString("exp", StringExperience);
                         pref.setString("taste", StringTaste);
 
-// TODO : update home screen
-                        // Get.offAll(Homescreen());
+                        Navigator.of(context).pop();
                       } catch (e) {
-                        print("error: $e");
+                        Logger().e("error: $e");
                       }
                     },
                     child: Padding(
