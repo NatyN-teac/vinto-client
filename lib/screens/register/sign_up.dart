@@ -206,8 +206,12 @@ class _SignUpState extends State<SignUp> {
                                   "location": {
                                     "types": "Point",
                                     "coordinates": [
-                                      mylocation?.latitude,
-                                      mylocation?.longitude
+                                      mylocation == null
+                                          ? 33.513550
+                                          : mylocation.latitude,
+                                      mylocation == null
+                                          ? -86.802734
+                                          : mylocation.longitude
                                     ]
                                   }
                                 };

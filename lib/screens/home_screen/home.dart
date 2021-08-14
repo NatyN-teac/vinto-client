@@ -7,13 +7,9 @@ import 'package:vinto/data/blocs/product/recommended.dart';
 import 'package:vinto/helper/colors.dart';
 import 'package:vinto/helper/screensize.dart';
 import 'package:vinto/model/product.dart';
-import 'package:vinto/screens/Search_screen/search.dart';
 import 'package:vinto/screens/cart_screen/cart.dart';
-import 'package:vinto/screens/cart_screen/main-cart-screen.dart';
 import 'package:vinto/screens/home_screen/widgets/item.dart';
 import 'package:vinto/screens/popular_in_your_area/popular.dart';
-import 'package:vinto/screens/result_screen/Result.dart';
-import 'package:vinto/screens/shop_near_me/shop_near.dart';
 import 'package:vinto/services/api_url.dart';
 import 'package:vinto/update_password.dart';
 import 'package:vinto/utils/data/injection/get_it_config.dart';
@@ -28,46 +24,12 @@ final _location = getIt.get<LocationBloc>();
 
 enum ProfileMenu { logout, update }
 
-class Homescreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    _homeBloc.init();
-    return DefaultTabController(
-      length: 5,
-      child: Scaffold(
-          bottomNavigationBar: TabBar(
-              indicatorColor: Mycolors.green,
-              indicatorSize: TabBarIndicatorSize.tab,
-              isScrollable: false,
-              unselectedLabelColor: Mycolors.blacktext2,
-              labelColor: Mycolors.green,
-              labelPadding: EdgeInsets.all(15),
-              tabs: [
-                Icon(Icons.home_outlined),
-                Icon(Icons.gps_fixed),
-                Icon(Icons.search),
-                Icon(Icons.shopping_cart_outlined),
-                Icon(Icons.history)
-              ]),
-          body: TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            children: [
-              _HomeScreen(),
-              Shopnearscreen(),
-              Searchscreen(),
-              MainCartScreen(),
-              Resultscreen()
-            ],
-          )),
-    );
-  }
-}
-
-class _HomeScreen extends StatelessWidget {
-  const _HomeScreen({Key key}) : super(key: key);
+class RecomendedScreen extends StatelessWidget {
+  const RecomendedScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    _homeBloc.getRecommended();
     SizeConfig().init(context);
     var vert_block = SizeConfig.safeBlockVertical;
 

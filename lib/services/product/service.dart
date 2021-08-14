@@ -29,9 +29,10 @@ class ProductService {
       myPostdata["taste"] = tastes == null ? [] : tastes.split(',');
 
       var response = await dioclient.post(
-          "${ApiEndPoints.BASE_URL}products/search",
-          data: myPostdata,
-          options: Options(headers: DataCommons.authHeader()));
+        "${ApiEndPoints.BASE_URL}products/search",
+        data: myPostdata,
+        // options: Options(headers: DataCommons.authHeader())
+      );
       var result =
           (response.data as List).map((e) => Product.fromJson(e)).toList();
 
@@ -52,8 +53,12 @@ class ProductService {
 
   Future<Either<BasicFailure, List<Product>>> getPopular() async {
     try {
-      var response = await dioclient.get("${ApiEndPoints.BASE_URL}products",
-          options: Options(headers: DataCommons.authHeader()));
+      var response = await dioclient.get(
+        "${ApiEndPoints.BASE_URL}products",
+        // options: Options(headers: DataCommons.authHeader()
+
+        // )
+      );
 
       var result =
           (response.data as List).map((e) => Product.fromJson(e)).toList();
@@ -83,7 +88,7 @@ class ProductService {
           options: Options(headers: DataCommons.authHeader()));
       var result =
           (response.data as List).map((e) => Product.fromJson(e)).toList();
-      Logger().d(result.length);
+      // Logger().d(result.length);
 
       return right(result);
     } on DioError catch (e) {

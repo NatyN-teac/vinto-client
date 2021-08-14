@@ -6,7 +6,6 @@ import 'package:vinto/model/experience.dart';
 import 'package:vinto/model/interests.dart';
 import 'package:vinto/model/mood.dart';
 import 'package:vinto/model/taste.dart';
-import 'package:vinto/screens/home_screen/home.dart';
 import 'package:vinto/services/profile/service.dart';
 import 'package:vinto/widgets/light_Text.dart';
 import 'package:vinto/widgets/location_Pin.dart';
@@ -233,7 +232,8 @@ class _TasteFormState extends State<TasteForm> {
                         pref.setString("exp", StringExperience);
                         pref.setString("taste", StringTaste);
 
-                        Get.offAll(Homescreen());
+// TODO : update home screen
+                        // Get.offAll(Homescreen());
                       } catch (e) {
                         print("error: $e");
                       }
