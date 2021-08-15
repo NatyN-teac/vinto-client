@@ -15,6 +15,7 @@ import 'package:vinto/services/api_url.dart';
 import 'package:vinto/update_password.dart';
 import 'package:vinto/utils/data/injection/get_it_config.dart';
 import 'package:vinto/utils/ui/essentials.dart';
+import 'package:vinto/widgets/amout-widget.dart';
 
 // ignore_for_file: camel_case_types
 // ignore_for_file: non_constant_identifier_names
@@ -463,95 +464,8 @@ class _RecommendedWidget extends StatelessWidget {
                         SizedBox(
                           height: vert_block * 1.3,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Container(
-                              // width: horz_block * 27,
-                              // height: vert_block * 4,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: horz_block * 2),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(color: Mycolors.green)),
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '1/8th OZ',
-                                      style: TextStyle(
-                                          fontSize: vert_block * 1.4,
-                                          color: Mycolors.green),
-                                    ),
-                                    Text(
-                                      '\$${r[0].price}',
-                                      style: TextStyle(
-                                          fontSize: vert_block * 1.4,
-                                          color: Colors.black),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: vert_block * 4,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: horz_block * 2),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(color: Mycolors.graytext)),
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '1/4th OZ',
-                                      style: TextStyle(
-                                          fontSize: vert_block * 1.4,
-                                          color: Mycolors.graytext),
-                                    ),
-                                    Text(
-                                      '\$70',
-                                      style: TextStyle(
-                                          fontSize: vert_block * 1.4,
-                                          color: Colors.black),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: vert_block * 4,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: horz_block * 2),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(color: Mycolors.graytext)),
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '1/2 OZ',
-                                      style: TextStyle(
-                                          fontSize: vert_block * 1.4,
-                                          color: Mycolors.graytext),
-                                    ),
-                                    Text(
-                                      '\$70',
-                                      style: TextStyle(
-                                          fontSize: vert_block * 1.4,
-                                          color: Colors.black),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
+                        PopularItemSizeWidget(
+                          price: r[0].price,
                         ),
                         SizedBox(
                           height: vert_block * 1.3,

@@ -20,6 +20,17 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            iconSize: 30,
+            icon: Icon(Icons.arrow_back)),
+      ),
       body: Container(
         decoration: mainBg,
         child: ListView(
